@@ -1,0 +1,4 @@
+[flake8]
+statistics = true
+max-line-length = 120
+ignore = ["E203", "E501", "W503"]

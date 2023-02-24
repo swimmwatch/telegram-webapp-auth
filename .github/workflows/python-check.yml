@@ -1,0 +1,35 @@
+name: Run Python linters
+on:
+  pull_request:
+    paths:
+      - '**/*.py'
+      - 'poetry.lock'
+      - 'pyproject.toml'
+    branches:
+      - master
+      - dev
+
+jobs:
+  lint:
+    name: Run Python linters
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        poetry-version: ["1.3.2"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Poetry
+        run: pipx install poetry==${{matrix.poetry-version}}
+      - name: "Setup Python ${{matrix.python-version}}"
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{matrix.python-version}}
+          cache: 'poetry'
+      - name: Install dependencies
+        run: poetry install
+      - name: Run flake8
+        run: make flake
+      - name: Run mypy
+        run: make mypy
