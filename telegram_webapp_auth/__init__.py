@@ -1,5 +1,6 @@
 import hashlib
 import hmac
+import json
 import typing
 from urllib.parse import unquote
 
@@ -11,6 +12,14 @@ def parse_init_data(init_data: str) -> typing.Dict:
     :param init_data: the query string passed by the webapp
     """
     return dict(param.split("=") for param in init_data.split("&"))
+
+
+def parse_user_data(user_data: str) -> dict:
+    """
+    Convert user value from WebAppInitData to Python dictionary.
+    https://core.telegram.org/bots/webapps#webappinitdata
+    """
+    return json.loads(unquote(user_data))
 
 
 def _extract_hash_value(init_data: str) -> str:
@@ -53,4 +62,4 @@ def validate(init_data: str, secret_key: str) -> bool:
     return hmac.compare_digest(hash_, data_check)
 
 
-__all__ = ["validate", "generate_secret_key", "parse_init_data"]
+__all__ = ["validate", "generate_secret_key", "parse_init_data", "parse_user_data"]
