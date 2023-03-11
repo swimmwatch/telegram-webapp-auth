@@ -6,18 +6,19 @@ from urllib.parse import unquote
 
 
 def parse_init_data(init_data: str) -> typing.Dict:
-    """
-    Convert init_data string into dictionary.
+    """Convert init_data string into dictionary.
 
-    :param init_data: the query string passed by the webapp
+    Args:
+        init_data: the query string passed by the webapp
     """
     return dict(param.split("=") for param in init_data.split("&"))
 
 
 def parse_user_data(user_data: str) -> dict:
-    """
-    Convert user value from WebAppInitData to Python dictionary.
-    https://core.telegram.org/bots/webapps#webappinitdata
+    """Convert user value from WebAppInitData to Python dictionary.
+
+    Links:
+        https://core.telegram.org/bots/webapps#webappinitdata
     """
     return json.loads(unquote(user_data))
 
@@ -27,12 +28,17 @@ def _extract_hash_value(init_data: str) -> str:
 
 
 def generate_secret_key(telegram_bot_token: str, c_str: str = "WebAppData") -> str:
-    """
-    Generate "Secret key" described at:
-    https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app
+    """Generate "Secret key" described at Telegram documentation.
 
-    :param telegram_bot_token: Telegram Bot token
-    :return: Secret key
+    Links:
+        https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app
+
+    Args:
+        telegram_bot_token: Telegram Bot token
+        c_str: Encode string
+
+    Returns:
+        str: Secret key
     """
     c_str_enc = c_str.encode()
     token_enc = telegram_bot_token.encode()
@@ -40,14 +46,17 @@ def generate_secret_key(telegram_bot_token: str, c_str: str = "WebAppData") -> s
 
 
 def validate(init_data: str, secret_key: str) -> bool:
-    """
-    Validates the data received from the Telegram web app, using the
-    method documented here:
-    https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app
+    """Validates the data received from the Telegram web app, using the method from Telegram documentation.
 
-    :param init_data: the query string passed by the webapp
-    :param secret_key: Secret key string
-    :return: Validation result
+    Links:
+        https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app
+
+    Args:
+        init_data: the query string passed by the webapp
+        secret_key: Secret key string
+
+    Returns:
+        bool: Validation result
     """
     hash_ = _extract_hash_value(init_data)
     unquote_init_data = unquote(init_data)
@@ -60,5 +69,3 @@ def validate(init_data: str, secret_key: str) -> bool:
     secret_key_enc = secret_key.encode()
     data_check = hmac.new(init_data_enc, secret_key_enc, digestmod=hashlib.sha256).hexdigest()
     return hmac.compare_digest(hash_, data_check)
-
-
