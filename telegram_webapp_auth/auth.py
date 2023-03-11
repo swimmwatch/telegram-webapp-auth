@@ -60,12 +60,12 @@ def validate(init_data: str, secret_key: str) -> bool:
     """
     hash_ = _extract_hash_value(init_data)
     unquote_init_data = unquote(init_data)
-    init_data = sorted(
+    sorted_init_data = sorted(
         [chunk.split("=") for chunk in unquote_init_data.split("&") if chunk[: len("hash=")] != "hash="],
         key=lambda x: x[0],
     )
-    init_data = "\n".join([f"{key}={val}" for key, val in init_data])
-    init_data_enc = init_data.encode()
+    sorted_init_data_str = "\n".join([f"{key}={val}" for key, val in sorted_init_data])
+    init_data_enc = sorted_init_data_str.encode()
     secret_key_enc = secret_key.encode()
     data_check = hmac.new(init_data_enc, secret_key_enc, digestmod=hashlib.sha256).hexdigest()
     return hmac.compare_digest(hash_, data_check)
