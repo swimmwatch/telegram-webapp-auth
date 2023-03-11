@@ -1,6 +1,9 @@
 # telegram-webapp-auth
 This Python package implements [Telegram Web authentication algorithm](https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app).
 
+## Documentation
+[Small package - small documentation](docs/auth.md) :)
+
 ## Examples
 ### Using with FastAPI
 Let's create some useful stuff according [OAuth2 tutorial](https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/?h=auth).
