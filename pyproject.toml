@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "telegram-webapp-auth"
-version = "0.1.0"
+version = "1.0.1"
 description = ""
 authors = ["Dmitry Vasiliev <contact.vasiliev.dmitry@gmail.com>"]
 license = "MIT"
