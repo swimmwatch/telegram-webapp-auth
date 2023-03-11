@@ -5,6 +5,7 @@ description = "Python package that implements Telegram Web authentication algori
 authors = ["Dmitry Vasiliev <contact.vasiliev.dmitry@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+homepage = "https://pypi.org/project/telegram-webapp-auth/"
 repository = "https://github.com/swimmwatch/telegram-webapp-auth"
 packages = [{include = "telegram_webapp_auth"}]
 
