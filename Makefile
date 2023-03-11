@@ -10,6 +10,9 @@ flake:
 black:
 	poetry run black $(SRC_DIR)
 
+doc-lint:
+	poetry run lazydocs --validate $(PACKAGE_DIR)
+
 lint: flake mypy
 
 test:
