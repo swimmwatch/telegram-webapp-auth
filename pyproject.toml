@@ -16,6 +16,7 @@ mypy = "^1.0.1"
 flake8 = "5.0.4"
 black = "^23.1.0"
 lazydocs = "^0.4.8"
+pydocstyle = "^6.3.0"
 
 [build-system]
 requires = ["poetry-core"]
