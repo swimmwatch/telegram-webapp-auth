@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "telegram-webapp-auth"
 version = "1.0.1"
-description = ""
+description = "Python package that implements Telegram Web authentication algorithm."
 authors = ["Dmitry Vasiliev <contact.vasiliev.dmitry@gmail.com>"]
 license = "MIT"
 readme = "README.md"
