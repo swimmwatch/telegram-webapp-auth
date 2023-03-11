@@ -15,6 +15,7 @@ python = "^3.8"
 mypy = "^1.0.1"
 flake8 = "5.0.4"
 black = "^23.1.0"
+lazydocs = "^0.4.8"
 
 [build-system]
 requires = ["poetry-core"]
