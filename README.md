@@ -29,7 +29,7 @@ def verify_token(auth_cred: HTTPAuthorizationCredentials) -> TelegramUser:
     settings = TelegramBotSettings()
     init_data = auth_cred.credentials
     try:
-        if validate(init_data, settings.secret_key):
+        if validate(init_data, settings.secret_key):  # generated using generate_secret_key function
             raise ValueError("Invalid hash")
     except ValueError:
         raise HTTPException(status_code=403, detail="Could not validate credentials")
@@ -49,16 +49,20 @@ Finally, we can use it as usual.
 
 File `app.py`:
 ```python
+from pydantic import BaseModel
 from fastapi import FastAPI, Depends
 
-from config import TelegramBotSettings
 from utils import get_current_user, TelegramUser
 
 app = FastAPI()
 
+class Message(BaseModel):
+    text: str
 
-@app.get("")
+
+@app.post("/message")
 async def send_message(
+    message: Message,
     user: TelegramUser = Depends(get_current_user),
 ):
     """
