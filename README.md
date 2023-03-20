@@ -1,5 +1,5 @@
 # telegram-webapp-auth
-![PyPI release](https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/release.yml/badge.svg?branch=master)
+![PyPI release](https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/release.yml/badge.svg)
 
 This Python package implements [Telegram Web authentication algorithm](https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app).
 
