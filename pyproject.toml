@@ -20,6 +20,14 @@ flake8 = "5.0.4"
 black = ">=23.1,<25.0"
 lazydocs = "^0.4.8"
 pydocstyle = "^6.3.0"
+isort = "^5.13.2"
+flake8-isort = "^6.1.1"
+flake8-quotes = "^3.4.0"
+flake8-string-format = "^0.3.0"
+pep8-naming = "^0.14.1"
+flake8-bandit = "^4.1.1"
+flake8-comprehensions = "^3.15.0"
+flake8-pyproject = "^1.2.3"
 
 [build-system]
 requires = ["poetry-core"]
