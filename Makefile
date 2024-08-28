@@ -29,3 +29,6 @@ test:
 
 cov:
 	poetry run pytest --cov=$(PACKAGE_DIR) $(SRC_DIR)
+
+lock:
+	poetry lock --no-update
