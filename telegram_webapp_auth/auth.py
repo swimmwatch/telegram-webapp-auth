@@ -2,6 +2,7 @@ import dataclasses
 import hashlib
 import hmac
 import json
+import typing
 from json import JSONDecodeError
 from urllib.parse import unquote
 
@@ -18,14 +19,14 @@ class TelegramUser:
 
     id: int
     first_name: str
-    is_bot: bool | None = None
-    last_name: str | None = None
-    username: str | None = None
-    language_code: str | None = None
-    is_premium: bool | None = None
-    added_to_attachment_menu: bool | None = None
-    allows_write_to_pm: bool | None = None
-    photo_url: str | None = None
+    is_bot: typing.Optional[bool] = None
+    last_name: typing.Optional[str] = None
+    username: typing.Optional[str] = None
+    language_code: typing.Optional[str] = None
+    is_premium: typing.Optional[bool] = None
+    added_to_attachment_menu: typing.Optional[bool] = None
+    allows_write_to_pm: typing.Optional[bool] = None
+    photo_url: typing.Optional[str] = None
 
 
 def generate_secret_key(token: str) -> bytes:

@@ -10,7 +10,7 @@
 
 ---
 
-<a href="../../telegram_webapp_auth/auth.py#L31"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../../telegram_webapp_auth/auth.py#L32"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `generate_secret_key`
 
@@ -37,7 +37,7 @@ Links:  https://core.telegram.org/bots/webapps#validating-data-received-via-the-
 
 ---
 
-<a href="../../telegram_webapp_auth/auth.py#L11"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../../telegram_webapp_auth/auth.py#L12"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `TelegramUser`
 Represents a Telegram user. 
@@ -52,14 +52,14 @@ Links:  https://core.telegram.org/bots/webapps#webappuser
 __init__(
     id: int,
     first_name: str,
-    is_bot: bool | None = None,
-    last_name: str | None = None,
-    username: str | None = None,
-    language_code: str | None = None,
-    is_premium: bool | None = None,
-    added_to_attachment_menu: bool | None = None,
-    allows_write_to_pm: bool | None = None,
-    photo_url: str | None = None
+    is_bot: Optional[bool] = None,
+    last_name: Optional[str] = None,
+    username: Optional[str] = None,
+    language_code: Optional[str] = None,
+    is_premium: Optional[bool] = None,
+    added_to_attachment_menu: Optional[bool] = None,
+    allows_write_to_pm: Optional[bool] = None,
+    photo_url: Optional[str] = None
 ) → None
 ```
 
@@ -73,14 +73,14 @@ __init__(
 
 ---
 
-<a href="../../telegram_webapp_auth/auth.py#L48"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../../telegram_webapp_auth/auth.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `TelegramAuthenticator`
 
 
 
 
-<a href="../../telegram_webapp_auth/auth.py#L49"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../../telegram_webapp_auth/auth.py#L50"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -97,7 +97,7 @@ __init__(secret: bytes)
 
 ---
 
-<a href="../../telegram_webapp_auth/auth.py#L93"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../../telegram_webapp_auth/auth.py#L94"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `verify_token`
 
