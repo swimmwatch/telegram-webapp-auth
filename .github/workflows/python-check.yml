@@ -33,5 +33,7 @@ jobs:
         run: make flake
       - name: Run mypy
         run: make mypy
+      - name: Run black lint
+        run: make black-lint
       - name: Lint documentation
         run: make doc-lint
