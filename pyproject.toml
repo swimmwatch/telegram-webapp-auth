@@ -2,12 +2,24 @@
 name = "telegram-webapp-auth"
 version = "2.0.0"
 description = "Python package that implements Telegram Web authentication algorithm."
+documentation = "https://github.com/swimmwatch/telegram-webapp-auth"
 authors = ["Dmitry Vasiliev <contact.vasiliev.dmitry@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://pypi.org/project/telegram-webapp-auth/"
 repository = "https://github.com/swimmwatch/telegram-webapp-auth"
-keywords = ["Telegram", "Telegram Bot"]
+keywords = ["Telegram", "Telegram Bot", "Poetry"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Security",
+]
 packages = [{include = "telegram_webapp_auth"}]
 
 [tool.poetry.dependencies]
