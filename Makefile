@@ -32,3 +32,6 @@ cov:
 
 lock:
 	poetry lock --no-update
+
+install:
+	poetry install --no-root

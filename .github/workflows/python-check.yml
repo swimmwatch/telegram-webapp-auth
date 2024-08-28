@@ -28,7 +28,7 @@ jobs:
           python-version: ${{matrix.python-version}}
           cache: 'poetry'
       - name: Install dependencies
-        run: poetry install
+        run: make install
       - name: Run flake8
         run: make flake
       - name: Run mypy
