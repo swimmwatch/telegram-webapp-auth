@@ -47,6 +47,7 @@ mkdocstrings-python = "^1.11.1"
 mkdocs-coverage = "^1.1.0"
 mkdocs-section-index = "^0.3.9"
 mkdocs = "^1.6.1"
+mkdocs-macros-plugin = "^1.2.0"
 
 [build-system]
 requires = ["poetry-core"]
