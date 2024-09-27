@@ -2,7 +2,7 @@
 name = "telegram-webapp-auth"
 version = "2.0.0"
 description = "Python package that implements Telegram Web authentication algorithm."
-documentation = "https://github.com/swimmwatch/telegram-webapp-auth"
+documentation = "https://swimmwatch.github.io/telegram-webapp-auth/"
 authors = ["Dmitry Vasiliev <contact.vasiliev.dmitry@gmail.com>"]
 license = "MIT"
 readme = "README.md"
