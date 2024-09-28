@@ -1,4 +1,4 @@
-name: Run Python linters
+name: Run linters and tests
 on:
   pull_request:
     paths:
@@ -11,12 +11,12 @@ on:
 
 jobs:
   lint:
-    name: Run Python linters
+    name: "Run linters"
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
-        poetry-version: ["1.8.3"]
+        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
+        poetry-version: [ "1.8.3" ]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,3 +37,24 @@ jobs:
         run: make black-lint
       - name: Lint documentation
         run: make doc-lint
+  test:
+    name: "Run tests"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
+        poetry-version: [ "1.8.3" ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Poetry ${{matrix.poetry-version}}
+        run: pipx install poetry==${{matrix.poetry-version}}
+      - name: Setup Python ${{matrix.python-versions}}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{matrix.python-version}}
+          cache: "poetry"
+      - name: Install dependencies
+        run: make install
+      - name: Run pytest
+        run: make test

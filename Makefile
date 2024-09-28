@@ -1,4 +1,5 @@
 SRC_DIR=.
+TESTS_DIR=tests
 PACKAGE_DIR=telegram_webapp_auth
 REFERENCES_DIR=docs/references
 
@@ -24,9 +25,6 @@ format: black isort doc-lint
 
 lint: flake mypy black-lint
 
-test:
-	poetry run pytest $(SRC_DIR)
-
 cov:
 	poetry run pytest --cov=$(PACKAGE_DIR) $(SRC_DIR)
 
@@ -41,3 +39,6 @@ mkdocs-serve:
 
 mkdocs-deploy:
 	poetry run mkdocs gh-deploy --force
+
+test:
+	poetry run pytest -n 2 $(TESTS_DIR)
