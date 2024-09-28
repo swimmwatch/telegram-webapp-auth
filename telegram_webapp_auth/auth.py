@@ -57,6 +57,9 @@ class TelegramAuthenticator:
         Args:
             data: the query string passed by the webapp
         """
+        if not data:
+            raise InvalidInitDataError("Init Data cannot be empty")
+
         return dict(param.split("=") for param in data.split("&"))
 
     @staticmethod

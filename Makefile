@@ -1,6 +1,6 @@
 SRC_DIR=.
 PACKAGE_DIR=telegram_webapp_auth
-SPEC_DIR=docs/spec
+REFERENCES_DIR=docs/references
 
 mypy:
 	poetry run mypy --config formatters-cfg.toml $(SRC_DIR)
@@ -18,7 +18,7 @@ isort:
 	poetry run isort --settings-path formatters-cfg.toml $(SRC_DIR)
 
 doc-lint:
-	poetry run lazydocs --validate --output-path $(SPEC_DIR) $(PACKAGE_DIR)
+	poetry run lazydocs --validate --output-path $(REFERENCES_DIR) $(PACKAGE_DIR)
 
 format: black isort doc-lint
 
@@ -35,3 +35,9 @@ lock:
 
 install:
 	poetry install --no-root
+
+mkdocs-serve:
+	poetry run mkdocs serve
+
+mkdocs-deploy:
+	poetry run mkdocs gh-deploy --force

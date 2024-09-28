@@ -97,7 +97,7 @@ __init__(secret: bytes)
 
 ---
 
-<a href="../../telegram_webapp_auth/auth.py#L94"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../../telegram_webapp_auth/auth.py#L97"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `verify_token`
 

@@ -1,4 +1,4 @@
-### Using with FastAPI
+## Using with FastAPI
 Let's create some useful stuff according to [OAuth2 tutorial](https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/?h=auth).
 
 File `auth.py`:

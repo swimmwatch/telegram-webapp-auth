@@ -10,6 +10,8 @@
     <br/>
     <a href="LICENSE"><img src="https://img.shields.io/github/license/swimmwatch/telegram-webapp-auth" alt="License"></a>
     <a href="https://github.com/ambv/black"><img src="https://img.shields.io/badge/code%20style-black-black" alt="Code style"></a>
+    <a href="https://github.com/pycqa/flake8"><img src="https://img.shields.io/badge/lint-flake8-black" alt="Linter"></a>
+    <a href="https://github.com/python/mypy"><img src="https://img.shields.io/badge/type%20checker-mypy-black" alt="Type checker"></a>
     <a href="https://snyk.io/advisor/python/telegram-webapp-auth"><img src="https://snyk.io/advisor/python/telegram-webapp-auth/badge.svg" alt="Package health"></a>
     <br/>
     <a href="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/python-check.yml"><img src="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/python-check.yml/badge.svg" alt="Tests"></a>
@@ -27,7 +29,7 @@ pip install telegram-webapp-auth
 ```
 
 ## Documentation
-[Small package - small documentation](docs1/docs.md) :)
+[Small package - small documentation](https://swimmwatch.github.io/telegram-webapp-auth/guide/install/) :)
 
 ## License
 telegram-webapp-auth is licensed under the [MIT License](LICENSE).
