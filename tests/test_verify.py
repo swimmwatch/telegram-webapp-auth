@@ -1,3 +1,5 @@
+import typing
+
 import pytest
 
 from telegram_webapp_auth.auth import TelegramAuthenticator
@@ -23,8 +25,8 @@ from .conftest import TEST_USER
 )
 def test_parse(
     test_input: str,
-    expected_err: Exception | None,
-    expected_res: TelegramUser | None,
+    expected_err: typing.Union[Exception, None],
+    expected_res: typing.Union[TelegramUser, None],
     test_authenticator: TelegramAuthenticator,
 ):
     if expected_err:
