@@ -1,80 +1,35 @@
 # telegram-webapp-auth
-![PyPI release](https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/release.yml/badge.svg)
-<a href="https://pypi.org/project/telegram-webapp-auth" target="_blank">
-    <img src="https://img.shields.io/pypi/pyversions/telegram-webapp-auth.svg?color=%2334D058" alt="Supported Python versions">
-</a>
 
-This Python package implements [Telegram Web authentication algorithm](https://core.telegram.org/bots/webapps#validating-data-received-via-the-web-app).
+<!-- markdownlint-disable -->
+![telegram-webapp-auth](https://socialify.git.ci/swimmwatch/telegram-webapp-auth/image?description=1&font=Raleway&language=1&name=1&owner=1&pattern=Brick%20Wall&theme=Dark)
+
+<div align="center">
+  <p>
+    <a href="https://pypi.org/project/telegram-webapp-auth"><img src="https://img.shields.io/pypi/v/telegram-webapp-auth.svg" alt="PyPI"></a>
+    <a href="pyproject.toml"><img src="https://img.shields.io/pypi/pyversions/telegram-webapp-auth" alt="Supported Python Versions"></a>
+    <br/>
+    <a href="LICENSE"><img src="https://img.shields.io/github/license/swimmwatch/telegram-webapp-auth" alt="License"></a>
+    <a href="https://github.com/ambv/black"><img src="https://img.shields.io/badge/code%20style-black-black" alt="Code style"></a>
+    <a href="https://github.com/pycqa/flake8"><img src="https://img.shields.io/badge/lint-flake8-black" alt="Linter"></a>
+    <a href="https://github.com/python/mypy"><img src="https://img.shields.io/badge/type%20checker-mypy-black" alt="Type checker"></a>
+    <a href="https://snyk.io/advisor/python/telegram-webapp-auth"><img src="https://snyk.io/advisor/python/telegram-webapp-auth/badge.svg" alt="Package health"></a>
+    <br/>
+    <a href="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/python-check.yml"><img src="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/python-check.yml/badge.svg" alt="Tests"></a>
+    <a href="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/release.yml"><img src="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/release.yml/badge.svg" alt="Release"></a>
+    <a href="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/docs.yml"><img src="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/docs.yml/badge.svg" alt="Docs"></a>
+  </p>
+</div>
+<!-- markdownlint-enable -->
+
+This Python package implements [Telegram Web authentication algorithm](https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app).
+
+## Installation
+```bash
+pip install telegram-webapp-auth
+```
 
 ## Documentation
-[Small package - small documentation](docs/auth.md) :)
+[Small package - small documentation](https://swimmwatch.github.io/telegram-webapp-auth/guide/install/) :)
 
-## Examples
-### Using with FastAPI
-Let's create some useful stuff according [OAuth2 tutorial](https://fastapi.tiangolo.com/advanced/security/oauth2-scopes/?h=auth).
-
-File `utils.py`:
-```python
-from telegram_webapp_auth import parse_user_data, parse_init_data, validate
-from fastapi import HTTPException, Depends
-from fastapi.security.http import HTTPBase, HTTPAuthorizationCredentials
-from pydantic import BaseModel
-
-from .config import TelegramBotSettings  # Telegram Bot configuration
-
-telegram_authentication_schema = HTTPBase()
-
-
-class TelegramUser(BaseModel):
-    id: int
-    first_name: str
-    last_name: str
-    username: str
-    language_code: str
-
-
-def verify_token(auth_cred: HTTPAuthorizationCredentials) -> TelegramUser:
-    settings = TelegramBotSettings()
-    init_data = auth_cred.credentials
-    try:
-        if validate(init_data, settings.secret_key):  # generated using generate_secret_key function
-            raise ValueError("Invalid hash")
-    except ValueError:
-        raise HTTPException(status_code=403, detail="Could not validate credentials")
-
-    init_data = parse_init_data(init_data)
-    user_data = parse_user_data(init_data["user"])
-    return TelegramUser.parse_obj(user_data)
-
-
-def get_current_user(
-    auth_cred: HTTPAuthorizationCredentials = Depends(telegram_authentication_schema)
-) -> TelegramUser:
-    return verify_token(auth_cred)
-```
-
-Finally, we can use it as usual.
-
-File `app.py`:
-```python
-from pydantic import BaseModel
-from fastapi import FastAPI, Depends
-
-from utils import get_current_user, TelegramUser
-
-app = FastAPI()
-
-class Message(BaseModel):
-    text: str
-
-
-@app.post("/message")
-async def send_message(
-    message: Message,
-    user: TelegramUser = Depends(get_current_user),
-):
-    """
-    Some backend logic...
-    """
-    ...
-```
+## License
+telegram-webapp-auth is licensed under the [MIT License](LICENSE).

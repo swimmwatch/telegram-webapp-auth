@@ -1,33 +1,64 @@
 [tool.poetry]
 name = "telegram-webapp-auth"
-version = "1.0.1"
+version = "2.0.0"
 description = "Python package that implements Telegram Web authentication algorithm."
+documentation = "https://swimmwatch.github.io/telegram-webapp-auth/"
 authors = ["Dmitry Vasiliev <contact.vasiliev.dmitry@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://pypi.org/project/telegram-webapp-auth/"
 repository = "https://github.com/swimmwatch/telegram-webapp-auth"
-keywords = ["Telegram", "Telegram Bot"]
+keywords = ["Telegram", "Telegram Bot", "Poetry"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Security",
+]
 packages = [{include = "telegram_webapp_auth"}]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-
+python = "^3.9"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.0.1"
 flake8 = "5.0.4"
-black = "^23.1.0"
+black = ">=23.1,<25.0"
 lazydocs = "^0.4.8"
 pydocstyle = "^6.3.0"
+isort = "^5.13.2"
+flake8-isort = "^6.1.1"
+flake8-quotes = "^3.4.0"
+flake8-string-format = "^0.3.0"
+pep8-naming = "^0.14.1"
+flake8-bandit = "^4.1.1"
+flake8-comprehensions = "^3.15.0"
+flake8-pyproject = "^1.2.3"
+typing-extensions = "^4.12.2"
+mkdocs-material = "^9.5.38"
+mkdocstrings = "^0.26.1"
+mkdocstrings-python = "^1.11.1"
+mkdocs-coverage = "^1.1.0"
+mkdocs-section-index = "^0.3.9"
+mkdocs = "^1.6.1"
+mkdocs-macros-plugin = "^1.2.0"
+mkdocs-minify-plugin = "^0.8.0"
+pytest = "^8.3.3"
+pytest-xdist = "^3.6.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.mypy]
-show_error_codes = true
-
-[tool.black]
-target-version = ["py38"]
+[tool.isort]
+profile = "black"
+default_section = "THIRDPARTY"
+force_single_line = true
 line_length = 120
+use_parentheses = true
+py_version=39
