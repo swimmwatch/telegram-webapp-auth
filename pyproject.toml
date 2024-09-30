@@ -27,7 +27,7 @@ python = "^3.9"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.0.1"
-flake8 = "5.0.4"
+flake8 = "7.1.1"
 black = ">=23.1,<25.0"
 lazydocs = "^0.4.8"
 pydocstyle = "^6.3.0"
