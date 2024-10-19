@@ -3,15 +3,13 @@ Let's create authorization middleware.
 
 ```python
 from django.conf import settings
-from telegram_webapp_auth.auth import TelegramAuthenticator, generate_secret_key
+from telegram_webapp_auth.auth import TelegramAuthenticator
 from telegram_webapp_auth.errors import InvalidInitDataError
 
 class TWAAuthorizationMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
-        self._telegram_authenticator = TelegramAuthenticator(
-            generate_secret_key(settings.TELEGRAM_SECRET_KEY),
-        )
+        self._telegram_authenticator = TelegramAuthenticator(settings.TELEGRAM_SECRET_KEY)
 
     def __call__(self, request):
         # Code to be executed for each request before
