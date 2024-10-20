@@ -1,6 +1,17 @@
 ## Using with Django
 Let's create authorization middleware.
 
+Firstly, create variables in your `settings.py`:
+```python
+from telegram_webapp_auth.auth import generate_secret_key
+
+# other settings
+
+TELEGRAM_BOT_TOKEN = env.str('TELEGRAM_BOT_TOKEN')
+TELEGRAM_SECRET_KEY = generate_secret_key(TELEGRAM_BOT_TOKEN)
+```
+
+Then implement middleware:
 ```python
 from django.conf import settings
 from telegram_webapp_auth.auth import TelegramAuthenticator
