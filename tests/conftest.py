@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import re
+import typing
 from datetime import datetime
 from datetime import timezone
 from urllib.parse import unquote
@@ -45,7 +46,7 @@ def make_hash(data_check_string: str) -> str:
     return hmac.new(_TEST_SECRET, data_check_string.encode("utf-8"), hashlib.sha256).hexdigest()
 
 
-def make_init_data(auth_date: datetime | None = None) -> str:
+def make_init_data(auth_date: typing.Optional[datetime] = None) -> str:
     if not auth_date:
         auth_date = datetime.now(tz=timezone.utc)
 
