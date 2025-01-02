@@ -50,6 +50,7 @@ mkdocs-macros-plugin = "^1.2.0"
 mkdocs-minify-plugin = "^0.8.0"
 pytest = "^8.3.3"
 pytest-xdist = "^3.6.1"
+freezegun = "^1.5.1"
 
 [build-system]
 requires = ["poetry-core"]
