@@ -35,6 +35,19 @@
 
 
 
+---
+
+<a href="../../telegram_webapp_auth/errors.py#L9"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>class</kbd> `ExpiredInitDataError`
+
+
+
+
+
+
+
+
 
 
 ---

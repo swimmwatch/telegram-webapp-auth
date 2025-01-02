@@ -4,3 +4,7 @@ class BaseTWAError(Exception):
 
 class InvalidInitDataError(BaseTWAError):
     pass
+
+
+class ExpiredInitDataError(BaseTWAError):
+    pass
