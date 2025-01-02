@@ -3,9 +3,13 @@ import hashlib
 import hmac
 import json
 import typing
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 from json import JSONDecodeError
 from urllib.parse import unquote
 
+from telegram_webapp_auth.errors import ExpiredInitDataError
 from telegram_webapp_auth.errors import InvalidInitDataError
 
 
@@ -47,7 +51,7 @@ def generate_secret_key(token: str) -> bytes:
 
 
 class TelegramAuthenticator:
-    def __init__(self, secret: bytes):
+    def __init__(self, secret: bytes) -> None:
         self._secret = secret
 
     @staticmethod
@@ -94,15 +98,15 @@ class TelegramAuthenticator:
         client_hash = hmac.new(self._secret, token_bytes, hashlib.sha256).hexdigest()
         return hmac.compare_digest(client_hash, hash_)
 
-    def verify_token(self, token: str) -> TelegramUser:
+    def verify_token(self, token: str, expr_in: typing.Optional[timedelta] = None) -> TelegramUser:
         """Verifies the data using the method from documentation. Returns Telegram user if data is valid.
 
         Links:
             https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app
 
         Args:
-            hash_: hash from init data
             token: init data from webapp
+            expr_in: time delta to check if the token is expired
 
         Returns:
             TelegramUser: Telegram user if token is valid
@@ -123,6 +127,19 @@ class TelegramAuthenticator:
 
         if not self._validate(hash_, token):
             raise InvalidInitDataError("Invalid token")
+
+        auth_date = init_data.get("auth_date")
+        if not auth_date:
+            raise InvalidInitDataError("Init data does not contain auth_date")
+
+        try:
+            auth_dt = datetime.fromtimestamp(float(auth_date), tz=timezone.utc)
+        except ValueError:
+            raise InvalidInitDataError("Invalid auth_date")
+
+        if expr_in:
+            if datetime.now(tz=timezone.utc) - auth_dt > expr_in:
+                raise ExpiredInitDataError
 
         user_data = init_data.get("user")
         if not user_data:
