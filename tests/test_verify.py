@@ -1,7 +1,7 @@
 import typing
-from datetime import UTC
 from datetime import datetime
 from datetime import timedelta
+from datetime import timezone
 
 import freezegun
 import pytest
@@ -59,15 +59,15 @@ def test_parse(
         # Test case 2: expired on 1 second
         (
             timedelta(seconds=1),
-            datetime(2021, 1, 1, 0, 0, 2, tzinfo=UTC),
-            datetime(2021, 1, 1, 0, 0, 0, tzinfo=UTC),
+            datetime(2021, 1, 1, 0, 0, 2, tzinfo=timezone.utc),
+            datetime(2021, 1, 1, 0, 0, 0, tzinfo=timezone.utc),
             ExpiredInitDataError,
         ),
         # Test case 3: not expired
         (
             timedelta(seconds=10),
-            datetime(2021, 1, 1, 0, 0, 2, tzinfo=UTC),
-            datetime(2021, 1, 1, 0, 0, 0, tzinfo=UTC),
+            datetime(2021, 1, 1, 0, 0, 2, tzinfo=timezone.utc),
+            datetime(2021, 1, 1, 0, 0, 0, tzinfo=timezone.utc),
             None,
         ),
     ],
@@ -80,7 +80,7 @@ def test_parse_expire(
     expected_err: typing.Optional[typing.Type[Exception]],
 ) -> None:
     if not now:
-        now = datetime.now(tz=UTC)
+        now = datetime.now(tz=timezone.utc)
 
     test_input = make_init_data(auth_date)
 

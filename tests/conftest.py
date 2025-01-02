@@ -1,8 +1,8 @@
 import hashlib
 import hmac
 import re
-from datetime import UTC
 from datetime import datetime
+from datetime import timezone
 from urllib.parse import unquote
 
 import pytest
@@ -47,7 +47,7 @@ def make_hash(data_check_string: str) -> str:
 
 def make_init_data(auth_date: datetime | None = None) -> str:
     if not auth_date:
-        auth_date = datetime.now(tz=UTC)
+        auth_date = datetime.now(tz=timezone.utc)
 
     unix_time = int(auth_date.timestamp())
     init_data = _TEST_INIT_DATA.format(auth_date=unix_time)

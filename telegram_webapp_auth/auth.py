@@ -3,9 +3,9 @@ import hashlib
 import hmac
 import json
 import typing
-from datetime import UTC
 from datetime import datetime
 from datetime import timedelta
+from datetime import timezone
 from json import JSONDecodeError
 from urllib.parse import unquote
 
@@ -133,12 +133,12 @@ class TelegramAuthenticator:
             raise InvalidInitDataError("Init data does not contain auth_date")
 
         try:
-            auth_dt = datetime.fromtimestamp(float(auth_date), tz=UTC)
+            auth_dt = datetime.fromtimestamp(float(auth_date), tz=timezone.utc)
         except ValueError:
             raise InvalidInitDataError("Invalid auth_date")
 
         if expr_in:
-            if datetime.now(tz=UTC) - auth_dt > expr_in:
+            if datetime.now(tz=timezone.utc) - auth_dt > expr_in:
                 raise ExpiredInitDataError
 
         user_data = init_data.get("user")
