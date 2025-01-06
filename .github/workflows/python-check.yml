@@ -5,6 +5,7 @@ on:
       - '**/*.py'
       - 'poetry.lock'
       - 'pyproject.toml'
+      - '.github/workflows/python-check.yml'
     branches:
       - master
       - dev
