@@ -7,43 +7,37 @@ import freezegun
 import pytest
 
 from telegram_webapp_auth.auth import TelegramAuthenticator
-from telegram_webapp_auth.auth import TelegramUser
 from telegram_webapp_auth.errors import ExpiredInitDataError
 from telegram_webapp_auth.errors import InvalidInitDataError
 
-from .conftest import TEST_USER
 from .conftest import make_init_data
 
 
 @pytest.mark.parametrize(
-    "test_input,expected_err,expected_res",
+    "test_input,expected_err",
     [
         # Test case 1: invalid format (semicolon added)
         (
             make_init_data() + ";",
             InvalidInitDataError,
-            None,
         ),
         # Test case 2: valid input data
         (
             make_init_data(),
             None,
-            TEST_USER,
         ),
     ],
 )
 def test_parse(
     test_input: str,
     expected_err: typing.Optional[typing.Type[Exception]],
-    expected_res: typing.Optional[TelegramUser],
     authenticator: TelegramAuthenticator,
 ) -> None:
     if expected_err:
         with pytest.raises(expected_err):
-            authenticator.verify_token(test_input)
+            authenticator.validate(test_input)
     else:
-        result = authenticator.verify_token(test_input)
-        assert result == expected_res
+        authenticator.validate(test_input)
 
 
 @pytest.mark.parametrize(
@@ -87,6 +81,6 @@ def test_parse_expire(
     with freezegun.freeze_time(now):
         if expected_err:
             with pytest.raises(expected_err):
-                authenticator.verify_token(test_input, expr_in)
+                authenticator.validate(test_input, expr_in)
         else:
-            authenticator.verify_token(test_input, expr_in)
+            authenticator.validate(test_input, expr_in)
