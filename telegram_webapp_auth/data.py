@@ -34,7 +34,7 @@ class WebAppUser:
     photo_url: typing.Optional[str] = None
 
 
-class ChatType(enum.StrEnum):
+class ChatType(str, enum.Enum):
     PRIVATE = "private"
     GROUP = "group"
     SUPERGROUP = "supergroup"
