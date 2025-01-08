@@ -1,3 +1,4 @@
+import base64
 import hashlib
 import hmac
 import json
@@ -68,7 +69,7 @@ class TelegramAuthenticator:
         except JSONDecodeError:
             raise InvalidInitDataError("Cannot decode init data")
 
-    def _validate(self, hash_: str, token: str) -> bool:
+    def _validate(self, hash_: str, init_data: str) -> bool:
         """Validates the data received from the Telegram web app, using the method from Telegram documentation.
 
         Links:
@@ -76,13 +77,13 @@ class TelegramAuthenticator:
 
         Args:
             hash_: hash from init data
-            token: init data from webapp
+            init_data: init data from webapp
 
         Returns:
             bool: Validation result
         """
-        token_bytes = token.encode("utf-8")
-        client_hash = hmac.new(self._secret, token_bytes, hashlib.sha256).hexdigest()
+        init_data_bytes = init_data.encode("utf-8")
+        client_hash = hmac.new(self._secret, init_data_bytes, hashlib.sha256).hexdigest()
         return hmac.compare_digest(client_hash, hash_)
 
     @staticmethod
@@ -91,7 +92,7 @@ class TelegramAuthenticator:
         signature: bytes,
         message: bytes,
     ) -> bool:
-        """Verify the signature of the message using the public key.
+        """Verify the Ed25519 signature of the message using the public key.
 
         Args:
             public_key: public key
@@ -107,6 +108,24 @@ class TelegramAuthenticator:
             return True
         except InvalidSignature:
             return False
+
+    @staticmethod
+    def __decode_signature(val: str):
+        """Decode a base64-encoded signature, appending padding if necessary.
+
+        :param val: A base64-encoded string.
+        :return: Decoded signature as bytes.
+        """
+
+        # Add padding if the length is not a multiple of 4
+        padded_v = val + "=" * ((4 - len(val) % 4) % 4)
+
+        # Decode the Base64 string
+        try:
+            signature = base64.urlsafe_b64decode(padded_v)
+            return signature
+        except Exception as err:
+            raise InvalidInitDataError(f"An error occurred during decoding: {err}")
 
     def __serialize_init_data(self, init_data_dict: typing.Dict[str, typing.Any]) -> WebAppInitData:
         """Serialize the init data dictionary into WebAppInitData object.
@@ -144,16 +163,16 @@ class TelegramAuthenticator:
         expr_in: typing.Optional[timedelta] = None,
         is_test: bool = False,
     ) -> WebAppInitData:
-        """Validates the data received from the Telegram web app, using the method from Telegram documentation.
+        """Validates the data for Third-Party Use, using the method from Telegram documentation.
 
         Links:
-            https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app
+            https://core.telegram.org/bots/webapps#validating-data-for-third-party-use
 
         Args:
             init_data: init data from mini app
-            bot_id: bot id
+            bot_id: Telegram Bot ID
             expr_in: time delta to check if the token is expired
-            is_test: whether the data is for testing purposes
+            is_test: true if the init data was issued in Telegram production environment
 
         Returns:
             WebAppInitData: parsed init a data object
@@ -169,7 +188,8 @@ class TelegramAuthenticator:
             for key, val in sorted(init_data_dict.items(), key=lambda item: item[0])
             if key != "hash" and key != "signature"
         )
-        data_check_string = f"{bot_id}:WebAppData\n{data_check_string}\n"
+        data_check_string = f"{bot_id}:WebAppData\n{data_check_string}"
+
         signature = init_data_dict.get("signature")
         if not signature:
             raise InvalidInitDataError("Init data does not contain signature")
@@ -181,8 +201,10 @@ class TelegramAuthenticator:
         else:
             public_key = PROD_PUBLIC_KEY
 
-        if not self.__ed25519_verify(public_key, data_check_string.encode("utf-8"), signature.encode("utf-8")):
-            raise InvalidInitDataError("Invalid token")
+        signature_bytes = self.__decode_signature(signature)
+        data_check_string_bytes = data_check_string.encode("utf-8")
+        if not self.__ed25519_verify(public_key, signature_bytes, data_check_string_bytes):
+            raise InvalidInitDataError("Invalid data")
 
         auth_date = init_data_dict.get("auth_date")
         if not auth_date:
@@ -233,7 +255,7 @@ class TelegramAuthenticator:
         hash_ = hash_.strip()
 
         if not self._validate(hash_, data_check_string):
-            raise InvalidInitDataError("Invalid token")
+            raise InvalidInitDataError("Invalid data")
 
         auth_date = init_data_dict.get("auth_date")
         if not auth_date:
