@@ -11,6 +11,8 @@ from urllib.parse import unquote
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
+from telegram_webapp_auth.data import PROD_PUBLIC_KEY
+from telegram_webapp_auth.data import TEST_PUBLIC_KEY
 from telegram_webapp_auth.data import WebAppChat
 from telegram_webapp_auth.data import WebAppInitData
 from telegram_webapp_auth.data import WebAppUser
@@ -40,7 +42,7 @@ class TelegramAuthenticator:
         self._secret = secret
 
     @staticmethod
-    def _parse_init_data(data: str) -> dict:
+    def __parse_init_data(data: str) -> dict:
         """Convert init_data string into dictionary.
 
         Args:
@@ -52,7 +54,7 @@ class TelegramAuthenticator:
         return dict(param.split("=") for param in data.split("&"))
 
     @staticmethod
-    def _parse_json(data: str) -> dict:
+    def __parse_json(data: str) -> dict:
         """Convert JSON string value from WebAppInitData to Python dictionary.
 
         Links:
@@ -84,7 +86,7 @@ class TelegramAuthenticator:
         return hmac.compare_digest(client_hash, hash_)
 
     @staticmethod
-    def _ed25519_verify(
+    def __ed25519_verify(
         public_key: Ed25519PublicKey,
         signature: bytes,
         message: bytes,
@@ -105,6 +107,98 @@ class TelegramAuthenticator:
             return True
         except InvalidSignature:
             return False
+
+    def __serialize_init_data(self, init_data_dict: typing.Dict[str, typing.Any]) -> WebAppInitData:
+        """Serialize the init data dictionary into WebAppInitData object.
+
+        Args:
+            init_data_dict: the init data dictionary
+
+        Returns:
+            WebAppInitData: the serialized WebAppInitData object
+        """
+
+        user_data = init_data_dict.get("user")
+        if user_data:
+            user_data = self.__parse_json(user_data)
+
+        chat_data = init_data_dict.get("chat")
+        if chat_data:
+            chat_data = self.__parse_json(chat_data)
+
+        receiver_data = init_data_dict.get("receiver")
+        if receiver_data:
+            receiver_data = self.__parse_json(receiver_data)
+
+        data = init_data_dict | {
+            "user": WebAppUser(**user_data) if user_data else None,
+            "receiver": WebAppUser(**receiver_data) if receiver_data else None,
+            "chat": WebAppChat(**chat_data) if chat_data else None,
+        }
+        return WebAppInitData(**data)
+
+    def validate_third_party(
+        self,
+        init_data: str,
+        bot_id: int,
+        expr_in: typing.Optional[timedelta] = None,
+        is_test: bool = False,
+    ) -> WebAppInitData:
+        """Validates the data received from the Telegram web app, using the method from Telegram documentation.
+
+        Links:
+            https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app
+
+        Args:
+            init_data: init data from mini app
+            bot_id: bot id
+            expr_in: time delta to check if the token is expired
+            is_test: whether the data is for testing purposes
+
+        Returns:
+            WebAppInitData: parsed init a data object
+
+        Raises:
+            InvalidInitDataError: if the init data is invalid
+            ExpiredInitDataError: if the init data is expired
+        """
+        init_data = unquote(init_data)
+        init_data_dict = self.__parse_init_data(init_data)
+        data_check_string = "\n".join(
+            f"{key}={val}"
+            for key, val in sorted(init_data_dict.items(), key=lambda item: item[0])
+            if key != "hash" and key != "signature"
+        )
+        data_check_string = f"{bot_id}:WebAppData\n{data_check_string}\n"
+        signature = init_data_dict.get("signature")
+        if not signature:
+            raise InvalidInitDataError("Init data does not contain signature")
+
+        signature = signature.strip()
+
+        if is_test:
+            public_key = TEST_PUBLIC_KEY
+        else:
+            public_key = PROD_PUBLIC_KEY
+
+        if not self.__ed25519_verify(public_key, data_check_string.encode("utf-8"), signature.encode("utf-8")):
+            raise InvalidInitDataError("Invalid token")
+
+        auth_date = init_data_dict.get("auth_date")
+        if not auth_date:
+            raise InvalidInitDataError("Init data does not contain auth_date")
+
+        try:
+            auth_dt = datetime.fromtimestamp(float(auth_date), tz=timezone.utc)
+        except ValueError:
+            raise InvalidInitDataError("Invalid auth_date")
+
+        if expr_in:
+            now = datetime.now(tz=timezone.utc)
+            if now - auth_dt > expr_in:
+                raise ExpiredInitDataError
+
+        return self.__serialize_init_data(init_data_dict)
 
     def validate(
         self,
@@ -128,7 +222,7 @@ class TelegramAuthenticator:
             ExpiredInitDataError: if the init data is expired
         """
         init_data = unquote(init_data)
-        init_data_dict = self._parse_init_data(init_data)
+        init_data_dict = self.__parse_init_data(init_data)
         data_check_string = "\n".join(
             f"{key}={val}" for key, val in sorted(init_data_dict.items(), key=lambda item: item[0]) if key != "hash"
         )
@@ -155,21 +249,4 @@ class TelegramAuthenticator:
             if now - auth_dt > expr_in:
                 raise ExpiredInitDataError
 
-        user_data = init_data_dict.get("user")
-        if user_data:
-            user_data = self._parse_json(user_data)
-
-        chat_data = init_data_dict.get("chat")
-        if chat_data:
-            chat_data = self._parse_json(chat_data)
-
-        receiver_data = init_data_dict.get("receiver")
-        if receiver_data:
-            receiver_data = self._parse_json(receiver_data)
-
-        data = init_data_dict | {
-            "user": WebAppUser(**user_data) if user_data else None,
-            "receiver": WebAppUser(**receiver_data) if receiver_data else None,
-            "chat": WebAppChat(**chat_data) if chat_data else None,
-        }
-        return WebAppInitData(**data)
+        return self.__serialize_init_data(init_data_dict)
