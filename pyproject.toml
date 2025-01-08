@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "telegram-webapp-auth"
-version = "2.0.1"
+version = "3.0.0"
 description = "Python package that implements Telegram Mini Apps authentication algorithms."
 documentation = "https://swimmwatch.github.io/telegram-webapp-auth/"
 authors = ["Dmitry Vasiliev <contact.vasiliev.dmitry@gmail.com>"]
