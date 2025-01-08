@@ -8,7 +8,7 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://pypi.org/project/telegram-webapp-auth/"
 repository = "https://github.com/swimmwatch/telegram-webapp-auth"
-keywords = ["Telegram", "Telegram Bot", "Poetry"]
+keywords = ["Telegram", "Telegram Mini Apps", "Telegram Bot", "Poetry"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
