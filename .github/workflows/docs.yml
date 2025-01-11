@@ -1,4 +1,4 @@
-name: "Deploy documentation to PyPI"
+name: "Deploy documentation to GitHub Pages"
 on:
   release:
     types:
