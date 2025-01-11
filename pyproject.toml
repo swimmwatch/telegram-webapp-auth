@@ -1,20 +1,21 @@
 [tool.poetry]
 name = "telegram-webapp-auth"
-version = "2.0.1"
-description = "Python package that implements Telegram Web authentication algorithm."
+version = "3.0.0"
+description = "Python package that implements Telegram Mini Apps authentication algorithms."
 documentation = "https://swimmwatch.github.io/telegram-webapp-auth/"
 authors = ["Dmitry Vasiliev <contact.vasiliev.dmitry@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://pypi.org/project/telegram-webapp-auth/"
 repository = "https://github.com/swimmwatch/telegram-webapp-auth"
-keywords = ["Telegram", "Telegram Bot", "Poetry"]
+keywords = ["Telegram", "Telegram Mini Apps", "Telegram Bot", "Poetry"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Operating System :: OS Independent",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -23,7 +24,8 @@ classifiers = [
 packages = [{include = "telegram_webapp_auth"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.9.2"
+cryptography = "^44.0.0"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.0.1"
@@ -50,6 +52,8 @@ mkdocs-macros-plugin = "^1.2.0"
 mkdocs-minify-plugin = "^0.8.0"
 pytest = "^8.3.3"
 pytest-xdist = "^3.6.1"
+freezegun = "^1.5.1"
+pytest-cov = "^6.0.0"
 
 [build-system]
 requires = ["poetry-core"]

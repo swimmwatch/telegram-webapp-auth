@@ -25,9 +25,6 @@ format: black isort doc-lint
 
 lint: flake mypy black-lint
 
-cov:
-	poetry run pytest --cov=$(PACKAGE_DIR) $(SRC_DIR)
-
 lock:
 	poetry lock --no-update
 
@@ -41,4 +38,7 @@ mkdocs-deploy:
 	poetry run mkdocs gh-deploy --force
 
 test:
-	poetry run pytest -n 2 $(TESTS_DIR)
+	poetry run pytest --cov=$(PACKAGE_DIR) --cov-branch --cov-report=xml --numprocesses logical $(TESTS_DIR)
+
+actionlint:
+	docker run --rm -v $(pwd):/repo --workdir /repo rhysd/actionlint:latest -color
