@@ -39,3 +39,6 @@ mkdocs-deploy:
 
 test:
 	poetry run pytest --cov=$(PACKAGE_DIR) --cov-branch --cov-report=xml --numprocesses logical $(TESTS_DIR)
+
+actionlint:
+	docker run --rm -v $(pwd):/repo --workdir /repo rhysd/actionlint:latest -color
