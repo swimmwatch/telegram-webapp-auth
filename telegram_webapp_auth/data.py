@@ -64,10 +64,10 @@ class WebAppInitData:
         https://core.telegram.org/bots/webapps#webappinitdata
     """
 
-    query_id: str
     auth_date: int
     hash: str
     signature: str
+    query_id: typing.Optional[str] = None
     user: typing.Optional[WebAppUser] = None
     receiver: typing.Optional[WebAppUser] = None
     chat: typing.Optional[WebAppChat] = None

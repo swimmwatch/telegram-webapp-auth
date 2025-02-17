@@ -111,10 +111,10 @@ Links:  https://core.telegram.org/bots/webapps#webappinitdata
 
 ```python
 __init__(
-    query_id: str,
     auth_date: int,
     hash: str,
     signature: str,
+    query_id: Optional[str] = None,
     user: Optional[WebAppUser] = None,
     receiver: Optional[WebAppUser] = None,
     chat: Optional[WebAppChat] = None,
