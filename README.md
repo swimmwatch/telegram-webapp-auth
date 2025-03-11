@@ -5,6 +5,9 @@
 
 <div align="center">
   <p>
+    <a href="https://github.com/telegram-mini-apps-dev/awesome-telegram-mini-apps">
+      <img src="https://awesome.re/mentioned-badge.svg" alt="Mentioned in Awesome Telegram Mini Apps">
+    </a>
     <a href="https://pypi.org/project/telegram-webapp-auth">
         <img src="https://img.shields.io/pypi/v/telegram-webapp-auth.svg" alt="PyPI">
     </a>
