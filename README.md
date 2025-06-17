@@ -58,4 +58,4 @@ pip install telegram-webapp-auth
 [Small package - small documentation](https://swimmwatch.github.io/telegram-webapp-auth/guide/install/) :)
 
 ## License
-telegram-webapp-auth is licensed under the [MIT License](LICENSE).
+`telegram-webapp-auth` is licensed under the [MIT License](LICENSE).
