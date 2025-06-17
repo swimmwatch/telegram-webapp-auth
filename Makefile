@@ -38,7 +38,7 @@ mkdocs-deploy:
 	poetry run mkdocs gh-deploy --force
 
 test:
-	poetry run pytest --benchmark-autosave --cov=$(PACKAGE_DIR) --cov-branch --cov-report=xml --numprocesses 2 $(TESTS_DIR)
+	poetry run pytest --benchmark-autosave --cov=$(PACKAGE_DIR) --cov-branch --cov-report=xml --numprocesses logical $(TESTS_DIR)
 
 actionlint:
 	docker run --rm -v $(pwd):/repo --workdir /repo rhysd/actionlint:latest -color
