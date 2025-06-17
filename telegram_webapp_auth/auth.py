@@ -7,6 +7,7 @@ from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
 from json import JSONDecodeError
+from urllib.parse import parse_qs
 from urllib.parse import unquote
 
 from cryptography.exceptions import InvalidSignature
@@ -52,7 +53,8 @@ class TelegramAuthenticator:
         if not data:
             raise InvalidInitDataError("Init Data cannot be empty")
 
-        return dict(param.split("=") for param in data.split("&"))
+        parsed_data = parse_qs(data)
+        return {key: value[0] for key, value in parsed_data.items()}
 
     @staticmethod
     def __parse_json(data: str) -> dict:
