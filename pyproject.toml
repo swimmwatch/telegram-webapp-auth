@@ -25,7 +25,7 @@ packages = [{include = "telegram_webapp_auth"}]
 
 [tool.poetry.dependencies]
 python = "^3.9.2"
-cryptography = "^44.0.0"
+cryptography = ">=44,<46"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.0.1"
