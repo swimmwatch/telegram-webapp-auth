@@ -77,3 +77,8 @@ def test_parse_expire(
             authenticator.validate_third_party(_TEST_INIT_DATA, _TEST_BOT_ID, expr_in)
     else:
         authenticator.validate_third_party(_TEST_INIT_DATA, _TEST_BOT_ID, expr_in)
+
+
+@pytest.mark.benchmark
+def test_validate_third_party_performance(benchmark, authenticator: TelegramAuthenticator):
+    benchmark.pedantic(authenticator.validate_third_party, args=(_TEST_INIT_DATA, _TEST_BOT_ID, timedelta(seconds=0)))
