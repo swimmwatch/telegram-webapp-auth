@@ -89,4 +89,10 @@ def test_parse_expire(
 @pytest.mark.benchmark
 def test_validate_performance(benchmark, authenticator: TelegramAuthenticator):
     test_input = make_init_data()
-    benchmark.pedantic(authenticator.validate, args=(test_input,))
+    benchmark.pedantic(
+        authenticator.validate,
+        args=(test_input,),
+        rounds=100,
+        iterations=10,
+        warmup_rounds=10,
+    )

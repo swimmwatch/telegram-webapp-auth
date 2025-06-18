@@ -112,6 +112,23 @@ class TelegramAuthenticator:
             return False
 
     @staticmethod
+    def _check_expiry(auth_date: typing.Optional[str], expr_in: typing.Optional[timedelta]):
+        """Check if the auth_date is present and not expired."""
+
+        if not auth_date:
+            raise InvalidInitDataError("Init data does not contain auth_date")
+
+        try:
+            auth_dt = datetime.fromtimestamp(float(auth_date), tz=timezone.utc)
+        except ValueError:
+            raise InvalidInitDataError("Invalid auth_date")
+
+        if expr_in:
+            now = datetime.now(tz=timezone.utc)
+            if now - auth_dt > expr_in:
+                raise ExpiredInitDataError
+
+    @staticmethod
     def __decode_signature(val: str):
         """Decode a base64-encoded signature, appending padding if necessary.
 
@@ -142,21 +159,25 @@ class TelegramAuthenticator:
         user_data = init_data_dict.get("user")
         if user_data:
             user_data = self.__parse_json(user_data)
+            init_data_dict["user"] = WebAppUser(**user_data)
+        else:
+            init_data_dict["user"] = None
 
         chat_data = init_data_dict.get("chat")
         if chat_data:
             chat_data = self.__parse_json(chat_data)
+            init_data_dict["chat"] = WebAppChat(**chat_data)
+        else:
+            init_data_dict["chat"] = None
 
         receiver_data = init_data_dict.get("receiver")
         if receiver_data:
             receiver_data = self.__parse_json(receiver_data)
+            init_data_dict["receiver"] = WebAppUser(**receiver_data)
+        else:
+            init_data_dict["receiver"] = None
 
-        data = init_data_dict | {
-            "user": WebAppUser(**user_data) if user_data else None,
-            "receiver": WebAppUser(**receiver_data) if receiver_data else None,
-            "chat": WebAppChat(**chat_data) if chat_data else None,
-        }
-        return WebAppInitData(**data)
+        return WebAppInitData(**init_data_dict)
 
     def validate_third_party(
         self,
@@ -209,18 +230,7 @@ class TelegramAuthenticator:
             raise InvalidInitDataError("Invalid data")
 
         auth_date = init_data_dict.get("auth_date")
-        if not auth_date:
-            raise InvalidInitDataError("Init data does not contain auth_date")
-
-        try:
-            auth_dt = datetime.fromtimestamp(float(auth_date), tz=timezone.utc)
-        except ValueError:
-            raise InvalidInitDataError("Invalid auth_date")
-
-        if expr_in:
-            now = datetime.now(tz=timezone.utc)
-            if now - auth_dt > expr_in:
-                raise ExpiredInitDataError
+        self._check_expiry(auth_date, expr_in)
 
         return self.__serialize_init_data(init_data_dict)
 
@@ -260,17 +270,6 @@ class TelegramAuthenticator:
             raise InvalidInitDataError("Invalid data")
 
         auth_date = init_data_dict.get("auth_date")
-        if not auth_date:
-            raise InvalidInitDataError("Init data does not contain auth_date")
-
-        try:
-            auth_dt = datetime.fromtimestamp(float(auth_date), tz=timezone.utc)
-        except ValueError:
-            raise InvalidInitDataError("Invalid auth_date")
-
-        if expr_in:
-            now = datetime.now(tz=timezone.utc)
-            if now - auth_dt > expr_in:
-                raise ExpiredInitDataError
+        self._check_expiry(auth_date, expr_in)
 
         return self.__serialize_init_data(init_data_dict)
