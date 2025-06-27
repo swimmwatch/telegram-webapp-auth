@@ -18,10 +18,7 @@ black-lint:
 isort:
 	poetry run isort --settings-path formatters-cfg.toml $(SRC_DIR)
 
-doc-lint:
-	poetry run lazydocs --validate --output-path $(REFERENCES_DIR) $(PACKAGE_DIR)
-
-format: black isort doc-lint
+format: black isort
 
 lint: flake mypy black-lint
 

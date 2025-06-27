@@ -37,8 +37,6 @@ jobs:
         run: make mypy
       - name: "Run black lint"
         run: make black-lint
-      - name: "Lint documentation"
-        run: make doc-lint
   test:
     name: "Run tests"
     runs-on: ${{matrix.os}}

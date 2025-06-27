@@ -1,3 +1,5 @@
+"""Telegram Web App Authenticator utilities."""
+
 import base64
 import hashlib
 import hmac
@@ -40,7 +42,14 @@ def generate_secret_key(token: str) -> bytes:
 
 
 class TelegramAuthenticator:
+    """Telegram Web App Authenticator."""
+
     def __init__(self, secret: bytes) -> None:
+        """Initialize the authenticator with a secret key.
+
+        Args:
+            secret: secret key generated from the Telegram Bot Token
+        """
         self._secret = secret
 
     @staticmethod
@@ -104,7 +113,6 @@ class TelegramAuthenticator:
         Returns:
             bool: True if the signature is valid, False otherwise
         """
-
         try:
             public_key.verify(signature, message)
             return True
@@ -114,7 +122,6 @@ class TelegramAuthenticator:
     @staticmethod
     def _check_expiry(auth_date: typing.Optional[str], expr_in: typing.Optional[timedelta]):
         """Check if the auth_date is present and not expired."""
-
         if not auth_date:
             raise InvalidInitDataError("Init data does not contain auth_date")
 
@@ -135,7 +142,6 @@ class TelegramAuthenticator:
         :param val: A base64-encoded string.
         :return: Decoded signature as bytes.
         """
-
         # Add padding if the length is not a multiple of 4
         padded_v = val + "=" * ((4 - len(val) % 4) % 4)
 
@@ -155,7 +161,6 @@ class TelegramAuthenticator:
         Returns:
             WebAppInitData: the serialized WebAppInitData object
         """
-
         user_data = init_data_dict.get("user")
         if user_data:
             user_data = self.__parse_json(user_data)
@@ -213,6 +218,9 @@ class TelegramAuthenticator:
         )
         data_check_string = f"{bot_id}:WebAppData\n{data_check_string}"
 
+        auth_date = init_data_dict.get("auth_date")
+        self._check_expiry(auth_date, expr_in)
+
         signature = init_data_dict.get("signature")
         if not signature:
             raise InvalidInitDataError("Init data does not contain signature")
@@ -228,9 +236,6 @@ class TelegramAuthenticator:
         data_check_string_bytes = data_check_string.encode("utf-8")
         if not self.__ed25519_verify(public_key, signature_bytes, data_check_string_bytes):
             raise InvalidInitDataError("Invalid data")
-
-        auth_date = init_data_dict.get("auth_date")
-        self._check_expiry(auth_date, expr_in)
 
         return self.__serialize_init_data(init_data_dict)
 
@@ -264,12 +269,11 @@ class TelegramAuthenticator:
         if not hash_:
             raise InvalidInitDataError("Init data does not contain hash")
 
-        hash_ = hash_.strip()
-
-        if not self._validate(hash_, data_check_string):
-            raise InvalidInitDataError("Invalid data")
-
         auth_date = init_data_dict.get("auth_date")
         self._check_expiry(auth_date, expr_in)
+
+        hash_ = hash_.strip()
+        if not self._validate(hash_, data_check_string):
+            raise InvalidInitDataError("Invalid data")
 
         return self.__serialize_init_data(init_data_dict)
