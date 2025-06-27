@@ -49,14 +49,16 @@ nav:
           - FastAPI: guide/examples/fastapi.md
   - References:
       - Authorization: references/auth.md
+      - Data: references/data.md
       - Errors: references/errors.md
   - License: license.md
 
 plugins:
   - search
   - section-index
-  - mkdocstrings
   - coverage
+  - mkdocstrings:
+      default_handler: python
   - macros:
       include_dir: .
   - minify:
