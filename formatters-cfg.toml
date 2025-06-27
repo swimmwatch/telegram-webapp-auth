@@ -4,8 +4,12 @@ target-version = ["py39"]
 
 [tool.flake8]
 inline-quotes = "double"
-ignore = "E203, W503, S101"
+ignore = "E203, W503, S101, D100, D104"
 max-line-length = 120
+docstring-convention = "google"
+per-file-ignores = [
+    "tests/*: D"
+]
 
 [tool.isort]
 profile = "black"
