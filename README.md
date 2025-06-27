@@ -48,14 +48,33 @@
 <!-- markdownlint-enable -->
 
 This Python package implements [Telegram Mini Apps authentication algorithms](https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app).
+It is designed to be simple and easy to use, providing a straightforward way to authenticate users in Telegram Mini Apps.
+
+## Features
+- **Easy to use**: The package is designed to be simple and intuitive, making it easy to integrate into your Telegram Mini App.
+- **Secure**: It implements the authentication algorithms as described in the Telegram Mini Apps documentation, ensuring that your app's authentication is secure.
+- **Lightweight**: The package is small, making it easy to include in your project without adding unnecessary bloat.
+- **Type hints**: The package is fully typed, providing better code completion and type checking in your IDE.
+- **Well-documented**: The package comes with comprehensive documentation, making it easy to understand how to use it effectively.
+- **Tested**: The package includes unit tests to ensure that it works correctly and reliably.
+- **Supports Python 3.9+**: The package is compatible with Python 3.9 and later versions, ensuring that it works with modern Python environments.
+- **Open source**: The package is open source and licensed under the MIT License, allowing you to use it freely in your projects.
+
+
+## Requirements
+- Python 3.9 or later
 
 ## Installation
 ```bash
 pip install telegram-webapp-auth
+# or
+poetry add telegram-webapp-auth
+# or
+uv add telegram-webapp-auth
 ```
 
 ## Documentation
-[Small package - small documentation](https://swimmwatch.github.io/telegram-webapp-auth/guide/install/) :)
+For detailed documentation, please visit the [telegram-webapp-auth documentation](https://swimmwatch.github.io/telegram-webapp-auth/).
 
 ## License
 `telegram-webapp-auth` is licensed under the [MIT License](LICENSE).
