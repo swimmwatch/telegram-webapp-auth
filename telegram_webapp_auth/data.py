@@ -1,3 +1,5 @@
+"""This module contains data structures used in the Telegram Web Apps API."""
+
 import dataclasses
 import enum
 import typing
@@ -35,6 +37,8 @@ class WebAppUser:
 
 
 class ChatType(str, enum.Enum):
+    """Represents the type of Telegram chat."""
+
     PRIVATE = "private"
     GROUP = "group"
     SUPERGROUP = "supergroup"
