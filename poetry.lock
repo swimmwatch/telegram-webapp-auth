@@ -538,6 +538,21 @@ files = [
 flake8 = ">=3,<3.2 || >3.2"
 
 [[package]]
+name = "flake8-docstrings"
+version = "1.7.0"
+description = "Extension for flake8 which uses pydocstyle to check docstrings"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "flake8_docstrings-1.7.0-py2.py3-none-any.whl", hash = "sha256:51f2344026da083fc084166a9353f5082b01f72901df422f74b4d953ae88ac75"},
+    {file = "flake8_docstrings-1.7.0.tar.gz", hash = "sha256:4c8cc748dc16e6869728699e5d0d685da9a10b0ea718e090b1ba088e67a941af"},
+]
+
+[package.dependencies]
+flake8 = ">=3"
+pydocstyle = ">=2.1"
+
+[[package]]
 name = "flake8-isort"
 version = "6.1.2"
 description = "flake8 plugin that integrates isort"
@@ -1801,4 +1816,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9.2"
-content-hash = "7114e3d3b33e7b55b2b38acfea57191d01133b9decd3db30d0d10f210a03a5a8"
+content-hash = "3e5d35a62800bb3a77b8bc4fd1ee248f92a536ef0df86a0e30fe880cd5df7178"

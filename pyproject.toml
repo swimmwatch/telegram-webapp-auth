@@ -54,6 +54,7 @@ pytest-xdist = "^3.6.1"
 freezegun = "^1.5.1"
 pytest-cov = "^6.0.0"
 pytest-benchmark = "^5.1.0"
+flake8-docstrings = "^1.7.0"
 
 [build-system]
 requires = ["poetry-core"]
