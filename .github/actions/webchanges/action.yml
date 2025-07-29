@@ -14,21 +14,23 @@ inputs:
     required: true
 
 runs:
-  using: composite
+  using: "composite"
   steps:
-    - name: "Print configurations"
-      shell: bash
-      run: |
-        echo "Configuration: ${{ inputs.config }}"
-        echo "Jobs: ${{ inputs.jobs }}"
-    - name: "Write config to file"
+    - name: "Write configs to files"
       shell: bash
       run: |
         echo "${{ inputs.config }}" > config.yaml
-    - name: "Parse YAML with yq"
+        echo "${{ inputs.jobs }}" > jobs.yaml
+    - name: "Setup Python"
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.x"
+        cache: "pip"
+    - name: "Install webchanges"
       shell: bash
       run: |
-        echo "Value of key1:"
-        yq '.key1' config.yaml
-        echo "Nested subkey:"
-        yq '.nested.subkey' config.yaml
+        pip install webchanges
+    - name: "Run web changes detection"
+      shell: bash
+      run: |
+        webchanges --config config.yaml --jobs jobs.yaml --hooks ${{ github.action_path }}/hooks.py
