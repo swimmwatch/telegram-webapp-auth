@@ -58,7 +58,7 @@ class GitHubIssueReporter(MarkdownReporter):
             "body": content,
             "labels": self.config.get('labels', [])
         }
-        response = self.post_client(url, headers=headers, data=issue_data)
+        response = self.post_client(url, headers=headers, json=issue_data)
 
         if response.status_code == HTTPStatus.CREATED:
             logger.info("Issue created successfully.")
