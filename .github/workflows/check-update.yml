@@ -1,0 +1,26 @@
+name: "Check "
+on:
+  workflow_dispatch:
+
+jobs:
+  check-telegram-webchanges:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run custom composite action
+        uses: ./.github/actions/webchanges
+        with:
+          jobs: |
+            name: Telegram Mini App documentation
+            url: https://core.telegram.org/bots/webapps
+            use_browser: false
+          config: |
+            report:
+              tz: UTC
+              github_issue:
+                enabled: true
+                owner: "swimmwatch-projects"
+                repo: "ag-bot"
+                token: "token"
+                title: "Telegram Mini App documentation update {dt}"
+                format_dt: "%Y-%m-%d"

@@ -1,0 +1,34 @@
+name: "Web changes detector"
+author: swimmwatch
+description: "Detect changes in web pages and notify via GitHub Actions"
+branding:
+  icon: "check-circle"
+  color: "blue"
+
+inputs:
+  config:
+    description: "Configuration for the web changes detector"
+    required: true
+  jobs:
+    description: "List of jobs to run for web changes detection"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: "Print configurations"
+      shell: bash
+      run: |
+        echo "Configuration: ${{ inputs.config }}"
+        echo "Jobs: ${{ inputs.jobs }}"
+    - name: "Write config to file"
+      shell: bash
+      run: |
+        echo "${{ inputs.config }}" > config.yaml
+    - name: "Parse YAML with yq"
+      shell: bash
+      run: |
+        echo "Value of key1:"
+        yq '.key1' config.yaml
+        echo "Nested subkey:"
+        yq '.nested.subkey' config.yaml
