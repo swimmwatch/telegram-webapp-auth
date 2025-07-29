@@ -6,7 +6,6 @@ from datetime import timezone
 from http import HTTPStatus
 from typing import TypedDict
 
-import requests
 from webchanges.reporters import MarkdownReporter
 
 logger = logging.getLogger(__name__)
@@ -59,11 +58,7 @@ class GitHubIssueReporter(MarkdownReporter):
             "body": content,
             "labels": self.config.get('labels', [])
         }
-        response = requests.post(
-            url,
-            json=issue_data,
-            headers=headers,
-        )
+        response = self.post_client(url, headers=headers, data=issue_data)
 
         if response.status_code == HTTPStatus.CREATED:
             logger.info("Issue created successfully.")
@@ -79,9 +74,9 @@ class GitHubIssueReporter(MarkdownReporter):
     ) -> typing.Iterator[str]:
         lines = super().submit(max_length, **kwargs)
         content = '\n'.join(lines)
-        if not content:
-            logger.info("No content to submit.")
-            return
+        # if not content:
+        #     logger.info("No content to submit.")
+        #     return
 
         logger.info("Submitting issue to GitHub...")
         self._post_request(content)
