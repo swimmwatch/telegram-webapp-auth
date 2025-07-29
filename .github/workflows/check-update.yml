@@ -1,4 +1,4 @@
-name: "Check "
+name: "Check Telegram Mini App documentation updates"
 on:
   workflow_dispatch:
 
