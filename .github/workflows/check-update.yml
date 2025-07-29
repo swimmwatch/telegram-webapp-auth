@@ -24,8 +24,8 @@ jobs:
               tz: UTC
               github_issue:
                 enabled: true
-                owner: 'swimmwatch-projects'
-                repo: 'ag-bot'
-                token: 'token'
+                owner: '${{ github.repository_owner }}'
+                repo: '${{ github.repository }}'
+                token: '${{ secrets.GITHUB_TOKEN }}'
                 title: 'Telegram Mini App documentation update {dt}'
                 format_dt: '%Y-%m-%d'
