@@ -53,8 +53,4 @@ runs:
     - name: "Run web changes detection"
       shell: bash
       run: |
-        webchanges \ 
-          --config config.yaml \
-          --jobs jobs.yaml \
-          --hooks ${{ github.action_path }}/hooks.py \
-          --database snapshots.db
+        webchanges --config config.yaml --jobs jobs.yaml --hooks ${{ github.action_path }}/hooks.py --database snapshots.db
