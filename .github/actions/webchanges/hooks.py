@@ -14,8 +14,6 @@ logger = logging.getLogger(__name__)
 
 
 class GitHubIssueReporter(MarkdownReporter):
-    """Reporter that submits issues to a GitHub repository."""
-
     __kind__ = "github_issue"
 
     config: TypedDict(
@@ -56,7 +54,7 @@ class GitHubIssueReporter(MarkdownReporter):
 
     def _create_issue(self, content: str):
         url = self._API_URL.format(owner=self.config["owner"], repo=self.config["repo"])
-        headers = {"Authorization": f"token {self.config['token']}", "Accept": "application/vnd.github.v3+json"}
+        headers = {"Authorization": f"Bearer {self.config['token']}", "Accept": "application/json"}
 
         title = self._format_title()
         content = self._format_text(content)
@@ -75,7 +73,6 @@ class GitHubIssueReporter(MarkdownReporter):
         max_length: int | None = None,
         **kwargs: typing.Any,
     ) -> typing.Iterator[str]:
-        """Submit the report as a GitHub issue."""
         lines = super().submit(max_length, **kwargs)
         content = "\n".join(lines)
         if not content:
@@ -97,7 +94,6 @@ def get_lines_between(
     start_pattern: str | None = None,
     end_pattern: str | None = None,
 ) -> typing.Generator[str, None, None]:
-    """Yield lines between start and end patterns."""
     started = False
     for line in lines:
         if not started:
@@ -111,8 +107,6 @@ def get_lines_between(
 
 
 class BetweenLinesFilter(FilterBase):
-    """Filter to extract lines between two patterns."""
-
     __kind__ = "between"
 
     __supported_subfilters__ = {
@@ -128,7 +122,6 @@ class BetweenLinesFilter(FilterBase):
         mime_type: str,
         subfilter: dict[str, typing.Any],
     ) -> tuple[str | bytes, str]:
-        """Filter lines between start and end patterns."""
         start_pattern = subfilter.get("start")
         end_pattern = subfilter.get("end")
 
