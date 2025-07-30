@@ -54,3 +54,4 @@ runs:
       shell: bash
       run: |
         webchanges --config config.yaml --jobs jobs.yaml --hooks ${{ github.action_path }}/hooks.py --database snapshots.db
+        ls .
