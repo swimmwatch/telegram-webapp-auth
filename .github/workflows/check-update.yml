@@ -27,5 +27,9 @@ jobs:
                 owner: '${{ github.repository_owner }}'
                 repo: '${{ github.event.repository.name }}'
                 token: '${{ secrets.GITHUB_TOKEN }}'
-                title: 'Telegram Mini App documentation update {dt}'
                 format_dt: '%Y-%m-%d'
+                title: 'Telegram Mini App documentation update {dt}'
+                format_content: |
+                  ```text
+                  {content}
+                  ```
