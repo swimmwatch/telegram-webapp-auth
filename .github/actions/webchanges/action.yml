@@ -47,7 +47,7 @@ runs:
       uses: actions/cache@v4
       with:
         path: ./snapshots.db
-        key: ${{ runner.os }}-snapshots-${{ hash() }}
+        key: ${{ runner.os }}-snapshots-${{ env.CONFIG_HASH }}-${{ env.JOBS_HASH }}
         restore-keys: |
           ${{ runner.os }}-snapshots-${{ env.CONFIG_HASH }}-${{ env.JOBS_HASH }}
     - name: "Run web changes detection"
