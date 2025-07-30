@@ -50,8 +50,15 @@ runs:
         key: ${{ runner.os }}-snapshots-${{ env.CONFIG_HASH }}-${{ env.JOBS_HASH }}
         restore-keys: |
           ${{ runner.os }}-snapshots-${{ env.CONFIG_HASH }}-${{ env.JOBS_HASH }}
+    - name: "Check if snapshots database exists"
+      shell: bash
+      run: |
+        if [ ! -f snapshots.db ]; then
+          echo "No snapshots database found, creating a new one."
+        else
+          echo "Snapshots database found, using existing one."
+        fi
     - name: "Run web changes detection"
       shell: bash
       run: |
         webchanges --config config.yaml --jobs jobs.yaml --hooks ${{ github.action_path }}/hooks.py --database snapshots.db
-        ls .
