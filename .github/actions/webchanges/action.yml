@@ -41,8 +41,8 @@ runs:
       shell: bash
       run: |
         # Compute the hash of the configs input and store it in an environment variable
-        CONFIG_HASH=$(echo "${{ inputs.config }}" | sha256sum | awk '{ print $1 }')
-        JOB_HASH=$(echo "${{ inputs.jobs }}" | sha256sum | awk '{ print $1 }')
+        CONFIG_HASH=$(cat ${{ env.CONFIG_PATH }} | sha256sum | awk '{ print $1 }')
+        JOB_HASH=$(cat ${{ env.JOBS_PATH }} | sha256sum | awk '{ print $1 }')
         
         # Compute cache key based on the hashes
         echo "CACHE_KEY=${{ runner.os }}-snapshots-${CONFIG_HASH}-${JOB_HASH}" >> $GITHUB_ENV
