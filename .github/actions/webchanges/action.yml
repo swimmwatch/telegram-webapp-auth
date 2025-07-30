@@ -16,44 +16,41 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: "Write configs to files"
+    - name: "Set up environment"
       shell: bash
       run: |
-        echo "${{ inputs.config }}" > config.yaml
-        echo "${{ inputs.jobs }}" > jobs.yaml
-    - name: "Compute SHA-256 of configs input"
-      shell: bash
-      run: |
-        # Compute the hash of the config input and store it in an environment variable
-        echo "${{ inputs.config }}" | sha256sum | awk '{ print $1 }' > config_hash.txt
-        HASH=$(cat config_hash.txt)
-        echo "CONFIG_HASH=$HASH" >> $GITHUB_ENV
-        
-        # Compute the hash of the jobs input and store it in an environment variable
-        echo "${{ inputs.jobs }}" | sha256sum | awk '{ print $1 }' > jobs_hash.txt
-        HASH=$(cat jobs_hash.txt)
-        echo "JOBS_HASH=$HASH" >> $GITHUB_ENV
+        echo "CONFIG_PATH=${{ github.workspace }}/config.yaml" >> $GITHUB_ENV
+        echo "JOBS_PATH=${{ github.workspace }}/jobs.yaml" >> $GITHUB_ENV
+        echo "SNAPSHOTS_DB=${{ github.workspace }}/snapshots.db" >> $GITHUB_ENV
+        echo "HOOKS_PATH=${{ github.action_path }}/hooks.py" >> $GITHUB_ENV
     - name: "Setup Python"
       uses: actions/setup-python@v5
       with:
         python-version: "3.x"
         cache: "pip"
-    - name: "Install webchanges"
+    - name: "Install webchanges package"
       shell: bash
       run: |
         pip install webchanges
+    - name: "Compute SHA-256 of configs input"
+      shell: bash
+      run: |
+        # Compute the hash of the configs input and store it in an environment variable
+        CONFIG_HASH=$(echo "${{ inputs.config }}" | sha256sum | awk '{ print $1 }')
+        JOB_HASH=$(echo "${{ inputs.jobs }}" | sha256sum | awk '{ print $1 }')
+        
+        # Compute cache key based on the hashes
+        echo "CACHE_KEY=${{ runner.os }}-snapshots-${CONFIG_HASH}-${JOB_HASH}" >> $GITHUB_ENV
     - name: "Restore cache snapshots database"
       id: cache-db
-      uses: actions/cache@v4
+      uses: actions/cache/restore@v4
       with:
-        path: ./snapshots.db
-        key: ${{ runner.os }}-snapshots-${{ env.CONFIG_HASH }}-${{ env.JOBS_HASH }}
-        restore-keys: |
-          ${{ runner.os }}-snapshots-${{ env.CONFIG_HASH }}-${{ env.JOBS_HASH }}
+        path: "${{ env.SNAPSHOTS_DB }}"
+        key: "${{ env.CACHE_KEY }}"
     - name: "Check if snapshots database exists"
       shell: bash
       run: |
-        if [ ! -f snapshots.db ]; then
+        if [ ! -f $SNAPSHOTS_DB ]; then
           echo "No snapshots database found, creating a new one."
         else
           echo "Snapshots database found, using existing one."
@@ -61,4 +58,9 @@ runs:
     - name: "Run web changes detection"
       shell: bash
       run: |
-        webchanges --config config.yaml --jobs jobs.yaml --hooks ${{ github.action_path }}/hooks.py --database snapshots.db
+        webchanges --config ${{ env.CONFIG_PATH }} --jobs ${{ env.JOBS_PATH }} --hooks ${{ env.HOOKS_PATH }} --database ${{ env.SNAPSHOTS_DB }}
+    - name: "Cache snapshots database"
+      uses: actions/cache/save@v4
+      with:
+        path: "${{ env.SNAPSHOTS_DB }}"
+        key: "${{ env.CACHE_KEY }}"
