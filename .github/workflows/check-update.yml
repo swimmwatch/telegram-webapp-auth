@@ -20,6 +20,11 @@ jobs:
             name: Telegram Mini App documentation
             url: https://core.telegram.org/bots/webapps
             use_browser: false
+            filters:
+              - html2text
+              - between:
+                  start: '#### __WebAppInitData'
+                  end: '#### __Events Available for Mini Apps'
           config: |
             report:
               tz: UTC
