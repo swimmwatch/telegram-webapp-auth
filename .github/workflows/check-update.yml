@@ -1,6 +1,7 @@
 name: "Check Telegram Mini App documentation updates"
 on:
   workflow_dispatch:
+  # TODO: trigger by schedule
   pull_request:
     branches:
       - master
@@ -12,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run custom composite action
+      - name: Run webchanges to check Telegram Mini App documentation updates
         uses: ./.github/actions/webchanges
         with:
           jobs: |
