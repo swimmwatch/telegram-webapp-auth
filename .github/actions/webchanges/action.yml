@@ -21,6 +21,18 @@ runs:
       run: |
         echo "${{ inputs.config }}" > config.yaml
         echo "${{ inputs.jobs }}" > jobs.yaml
+    - name: "Compute SHA-256 of configs input"
+      shell: bash
+      run: |
+        # Compute the hash of the config input and store it in an environment variable
+        echo "${{ inputs.config }}" | sha256sum | awk '{ print $1 }' > config_hash.txt
+        HASH=$(cat config_hash.txt)
+        echo "CONFIG_HASH=$HASH" >> $GITHUB_ENV
+        
+        # Compute the hash of the jobs input and store it in an environment variable
+        echo "${{ inputs.jobs }}" | sha256sum | awk '{ print $1 }' > jobs_hash.txt
+        HASH=$(cat jobs_hash.txt)
+        echo "JOBS_HASH=$HASH" >> $GITHUB_ENV
     - name: "Setup Python"
       uses: actions/setup-python@v5
       with:
@@ -30,7 +42,19 @@ runs:
       shell: bash
       run: |
         pip install webchanges
+    - name: "Restore cache snapshots database"
+      id: cache-db
+      uses: actions/cache@v4
+      with:
+        path: ./snapshots.db
+        key: ${{ runner.os }}-snapshots-${{ hash() }}
+        restore-keys: |
+          ${{ runner.os }}-snapshots-${{ env.CONFIG_HASH }}-${{ env.JOBS_HASH }}
     - name: "Run web changes detection"
       shell: bash
       run: |
-        webchanges --config config.yaml --jobs jobs.yaml --hooks ${{ github.action_path }}/hooks.py
+        webchanges \ 
+          --config config.yaml \
+          --jobs jobs.yaml \
+          --hooks ${{ github.action_path }}/hooks.py \
+          --database snapshots.db
