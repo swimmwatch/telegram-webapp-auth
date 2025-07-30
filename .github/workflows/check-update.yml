@@ -8,6 +8,9 @@ on:
       - dev
       - release/*
 
+permissions:
+  issues: write
+
 jobs:
   check-telegram-webchanges:
     runs-on: ubuntu-latest
