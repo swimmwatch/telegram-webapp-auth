@@ -53,7 +53,7 @@ class GitHubIssueReporter(MarkdownReporter):
         """Format the content of the issue."""
         format_content = self.config.get("format_content")
         if format_content:
-            content = content[:self._CONTENT_LIMIT - len(format_content) - 1]  # Leave space for the format string
+            content = content[: self._CONTENT_LIMIT - len(format_content) - 1]  # Leave space for the format string
             return format_content.format(content=content)
         return content
 
