@@ -52,9 +52,11 @@ class GitHubIssueReporter(MarkdownReporter):
     def _format_text(self, content: str) -> str:
         """Format the content of the issue."""
         format_content = self.config.get("format_content")
+        content = content[: self._CONTENT_LIMIT]
         if format_content:
             content = content[: self._CONTENT_LIMIT - len(format_content) - 1]  # Leave space for the format string
-            return format_content.format(content=content)
+            content = format_content.format(content=content)
+
         return content
 
     def _create_issue(self, content: str):
@@ -85,12 +87,6 @@ class GitHubIssueReporter(MarkdownReporter):
         if not content:
             logger.info("No content to submit.")
             return
-
-        if len(content) > self._CONTENT_LIMIT:
-            logger.warning(
-                f"Content exceeds GitHub's issue body limit ({self._CONTENT_LIMIT} characters). Truncating content."
-            )
-            content = content[: self._CONTENT_LIMIT]
 
         logger.info("Submitting issue to GitHub...")
         self._create_issue(content)
