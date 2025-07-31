@@ -53,6 +53,7 @@ class GitHubIssueReporter(MarkdownReporter):
         """Format the content of the issue."""
         format_content = self.config.get("format_content")
         if format_content:
+            content = content[:self._CONTENT_LIMIT - len(format_content) - 1]  # Leave space for the format string
             return format_content.format(content=content)
         return content
 
@@ -86,7 +87,9 @@ class GitHubIssueReporter(MarkdownReporter):
             return
 
         if len(content) > self._CONTENT_LIMIT:
-            logger.warning("Content exceeds GitHub's issue body limit (65536 characters). Truncating content.")
+            logger.warning(
+                f"Content exceeds GitHub's issue body limit ({self._CONTENT_LIMIT} characters). Truncating content."
+            )
             content = content[: self._CONTENT_LIMIT]
 
         logger.info("Submitting issue to GitHub...")
