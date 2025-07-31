@@ -3,7 +3,6 @@ on:
   workflow_dispatch:
 #  schedule:
 #    - cron: '*/30 * * * *'
-  # TODO: trigger by schedule
   pull_request:
     branches:
       - master
