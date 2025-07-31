@@ -29,6 +29,9 @@ class GitHubIssueReporter(MarkdownReporter):
             "labels": list[str],
             "format_dt": typing.Optional[str],
             "format_content": typing.Optional[str],
+            "assignees": typing.Optional[typing.Sequence[str]],
+            "type": typing.Optional[str],
+            "milestone": typing.Optional[str],
         },
     )
 
@@ -67,6 +70,19 @@ class GitHubIssueReporter(MarkdownReporter):
         title = self._format_title()
         content = self._format_text(content)
         issue_data = {"title": title, "body": content, "labels": self.config.get("labels", [])}
+
+        assignees = self.config.get("assignees", [])
+        if assignees:
+            issue_data["assignees"] = assignees
+
+        type_ = self.config.get("type")
+        if type_:
+            issue_data["type"] = type_
+
+        milestone = self.config.get("milestone")
+        if milestone:
+            issue_data["milestone"] = milestone
+
         response = self.post_client(url, headers=headers, json=issue_data)
 
         if response.status_code == HTTPStatus.CREATED:
