@@ -41,3 +41,7 @@ jobs:
                 title: 'Telegram Mini App documentation update {dt}'
                 assignees: 
                   - 'swimmwatch'
+                format_content: |
+                    ```text
+                    {content}
+                    ```
