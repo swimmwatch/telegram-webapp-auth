@@ -41,7 +41,8 @@ runs:
       shell: bash
       run: |
         # Compute the hash of the configs input and store it in an environment variable
-        CONFIG_HASH=$(cat ${{ env.CONFIG_PATH }} | sed "s/\${{ secrets.GITHUB_TOKEN }}/****/g" | sha256sum | awk '{ print $1 }')  # Replace GITHUB_TOKEN with a placeholder for idempotency
+        GH_TOKEN_VALUE=$(yq '.github_issue.token'${{ env.CONFIG_PATH }})
+        CONFIG_HASH=$(cat ${{ env.CONFIG_PATH }} | sed "s/\${GH_TOKEN_VALUE}/****/g" | sha256sum | awk '{ print $1 }')  # Replace GITHUB_TOKEN with a placeholder for idempotency
         JOB_HASH=$(sha256sum ${{ env.JOBS_PATH }} | awk '{ print $1 }')
         
         # Compute cache key based on the hashes
