@@ -1,5 +1,5 @@
 name: "Web changes detector"
-author: swimmwatch
+author: "Dmitry Vasiliev"
 description: "Detect changes in web pages and notify via GitHub Actions"
 branding:
   icon: "check-circle"
