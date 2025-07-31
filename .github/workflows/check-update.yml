@@ -1,6 +1,8 @@
 name: "Check Telegram Mini App documentation updates"
 on:
   workflow_dispatch:
+#  schedule:
+#    - cron: '*/30 * * * *'
   # TODO: trigger by schedule
   pull_request:
     branches:
