@@ -27,8 +27,8 @@ jobs:
             filters:
               - html2text
               - between:
-                  start: '#### __WebAppInitData'
-                  end: '#### __Events Available for Mini Apps'
+                  start: #### __WebAppInitData
+                  end: #### __Events Available for Mini Apps
           config: |
             report:
               tz: UTC
