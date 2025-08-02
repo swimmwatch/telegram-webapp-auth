@@ -13,11 +13,11 @@ permissions:
   issues: write
 
 jobs:
-  check-telegram-webchanges:
+  check-telegram-docs-updates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run webchanges to check Telegram Mini App documentation updates
+      - name: Check Telegram Mini App documentation updates
         uses: ./.github/actions/webchanges
         with:
           jobs: |
