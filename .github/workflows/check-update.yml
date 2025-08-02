@@ -1,13 +1,8 @@
 name: "Check Telegram Mini App documentation updates"
 on:
   workflow_dispatch:
-#  schedule:
-#    - cron: '*/30 * * * *'
-  pull_request:
-    branches:
-      - master
-      - dev
-      - release/*
+  schedule:
+    - cron: '*/30 * * * *'
 
 permissions:
   issues: write
