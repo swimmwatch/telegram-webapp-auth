@@ -36,7 +36,7 @@ jobs:
                 enabled: true
                 owner: "${{ github.repository_owner }}"
                 repo: "${{ github.event.repository.name }}"
-                token: "${{ secrets.GITHUB_TOKEN }}'
+                token: "${{ secrets.GITHUB_TOKEN }}"
                 format_dt: "%Y-%m-%d"
                 title: "Telegram Mini App documentation update: {dt}"
                 assignees: 
