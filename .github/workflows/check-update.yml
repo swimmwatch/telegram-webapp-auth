@@ -38,7 +38,7 @@ jobs:
                 repo: '${{ github.event.repository.name }}'
                 token: '${{ secrets.GITHUB_TOKEN }}'
                 format_dt: '%Y-%m-%d'
-                title: 'Telegram Mini App documentation update {dt}'
+                title: 'Telegram Mini App documentation update: {dt}'
                 assignees: 
                   - 'swimmwatch'
                 format_content: |
