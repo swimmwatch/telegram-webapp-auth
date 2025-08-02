@@ -23,6 +23,8 @@ runs:
         echo "JOBS_PATH=${{ github.workspace }}/jobs.yaml" >> $GITHUB_ENV
         echo "SNAPSHOTS_DB=${{ github.workspace }}/snapshots.db" >> $GITHUB_ENV
         echo "HOOKS_PATH=${{ github.action_path }}/hooks.py" >> $GITHUB_ENV
+        echo "WEBCHANGES_VERSION=3.30.0" >> $GITHUB_ENV
+        echo "PYTHON_VERSION=3.10" >> $GITHUB_ENV
     - name: "Write configs to files"
       shell: bash
       run: |
@@ -31,12 +33,12 @@ runs:
     - name: "Setup Python"
       uses: actions/setup-python@v5
       with:
-        python-version: "3.x"
+        python-version: ${{ env.PYTHON_VERSION }}
         cache: "pip"
     - name: "Install webchanges package"
       shell: bash
       run: |
-        pip install webchanges
+        pip install webchanges==${{ env.WEBCHANGES_VERSION }}
     - name: "Compute SHA-256 of configs input"
       shell: bash
       run: |
