@@ -1,4 +1,4 @@
-"""Custom repoters and filters for webchanges utility."""
+"""Custom reporters and filters for webchanges utility."""
 
 import json
 import logging
