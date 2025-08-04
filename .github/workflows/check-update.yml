@@ -1,0 +1,42 @@
+name: "Check Telegram Mini App documentation updates"
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 * * * *'
+
+permissions:
+  issues: write
+
+jobs:
+  check-telegram-docs-updates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Telegram Mini App documentation updates
+        uses: ./.github/actions/webchanges
+        with:
+          jobs: |
+            name: Telegram Mini App documentation
+            url: https://core.telegram.org/bots/webapps
+            use_browser: false
+            filters:
+              - html2text
+              - between:
+                  start: "#### __WebAppInitData"
+                  end: "#### __Events Available for Mini Apps"
+          config: |
+            report:
+              tz: UTC
+              github_issue:
+                enabled: true
+                owner: "${{ github.repository_owner }}"
+                repo: "${{ github.event.repository.name }}"
+                token: "${{ secrets.GITHUB_TOKEN }}"
+                format_dt: "%Y-%m-%d"
+                title: "Telegram Mini App documentation update: {dt}"
+                assignees: 
+                  - "swimmwatch"
+                format_content: |
+                  ```diff
+                  {content}
+                  ```
