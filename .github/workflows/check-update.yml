@@ -2,7 +2,7 @@ name: "Check Telegram Mini App documentation updates"
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '0 * * * *'
 
 permissions:
   issues: write
