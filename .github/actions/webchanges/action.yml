@@ -1,0 +1,72 @@
+name: "Web changes detector"
+author: "Dmitry Vasiliev"
+description: "Detect changes in web pages and notify via GitHub Actions"
+branding:
+  icon: "check-circle"
+  color: "blue"
+
+inputs:
+  config:
+    description: "Configuration for the web changes detector"
+    required: true
+  jobs:
+    description: "List of jobs to run for web changes detection"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Set up environment"
+      shell: bash
+      run: |
+        echo "CONFIG_PATH=${{ github.workspace }}/config.yaml" >> $GITHUB_ENV
+        echo "JOBS_PATH=${{ github.workspace }}/jobs.yaml" >> $GITHUB_ENV
+        echo "SNAPSHOTS_DB=${{ github.workspace }}/snapshots.db" >> $GITHUB_ENV
+        echo "HOOKS_PATH=${{ github.action_path }}/hooks.py" >> $GITHUB_ENV
+        echo "WEBCHANGES_VERSION=3.30.0" >> $GITHUB_ENV
+        echo "PYTHON_VERSION=3.10" >> $GITHUB_ENV
+    - name: "Write configs to files"
+      shell: bash
+      run: |
+        echo '${{ inputs.config }}' > $CONFIG_PATH
+        echo '${{ inputs.jobs }}' > $JOBS_PATH
+    - name: "Setup Python"
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: "pip"
+    - name: "Install webchanges package"
+      shell: bash
+      run: |
+        pip install webchanges==${{ env.WEBCHANGES_VERSION }}
+    - name: "Compute SHA-256 of configs input"
+      shell: bash
+      run: |
+        # Compute the hash of the configs input and store it in an environment variable
+        JOB_HASH=$(sha256sum ${{ env.JOBS_PATH }} | awk '{ print $1 }')
+        
+        # Compute cache key based on the hashes
+        echo "CACHE_KEY=${{ runner.os }}-snapshots-${JOB_HASH}" >> $GITHUB_ENV
+    - name: "Restore cache snapshots database"
+      id: cache-db
+      uses: actions/cache/restore@v4
+      with:
+        path: "${{ env.SNAPSHOTS_DB }}"
+        key: "${{ env.CACHE_KEY }}"
+    - name: "Check if snapshots database exists"
+      shell: bash
+      run: |
+        if [ ! -f $SNAPSHOTS_DB ]; then
+          echo "No snapshots database found, creating a new one."
+        else
+          echo "Snapshots database found, using existing one."
+        fi
+    - name: "Run web changes detection"
+      shell: bash
+      run: |
+        webchanges --config ${{ env.CONFIG_PATH }} --jobs ${{ env.JOBS_PATH }} --hooks ${{ env.HOOKS_PATH }} --database ${{ env.SNAPSHOTS_DB }}
+    - name: "Cache snapshots database"
+      uses: actions/cache/save@v4
+      with:
+        path: "${{ env.SNAPSHOTS_DB }}"
+        key: "${{ env.CACHE_KEY }}"
