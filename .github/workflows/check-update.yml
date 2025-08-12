@@ -11,7 +11,7 @@ jobs:
   check-telegram-docs-updates:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Check Telegram Mini App documentation updates
         uses: ./.github/actions/webchanges
         with:
