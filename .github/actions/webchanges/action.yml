@@ -1,3 +1,5 @@
+# DEPRECATED: This action is deprecated.
+# It uses webchanges-action
 name: "Web changes detector"
 author: "Dmitry Vasiliev"
 description: "Detect changes in web pages and notify via GitHub Actions"
