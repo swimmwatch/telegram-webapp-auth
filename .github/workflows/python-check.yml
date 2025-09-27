@@ -29,6 +29,7 @@ jobs:
         with:
           python-version: ${{matrix.python-version}}
           cache: 'poetry'
+          allow-prereleases: true
       - name: "Install dependencies"
         run: make install
       - name: "Run flake8"
@@ -55,6 +56,7 @@ jobs:
         with:
           python-version: ${{matrix.python-version}}
           cache: "poetry"
+          allow-prereleases: true
       - name: "Install dependencies"
         run: make install
       - name: "Run pytest"
