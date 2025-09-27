@@ -1,13 +1,26 @@
 [tool.poetry]
 name = "telegram-webapp-auth"
+packages = [{include = "telegram_webapp_auth"}]
+
+[tool.poetry.dependencies]
+python = "^3.9.2"
+cryptography = ">=44,<47"
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.9"
+
+[project]
+name = "telegram-webapp-auth"
 version = "3.0.7"
 description = "Python package that implements Telegram Mini Apps authentication algorithms."
-documentation = "https://swimmwatch.github.io/telegram-webapp-auth/"
-authors = ["Dmitry Vasiliev <contact.vasiliev.dmitry@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://pypi.org/project/telegram-webapp-auth/"
-repository = "https://github.com/swimmwatch/telegram-webapp-auth"
+authors = [
+    {name = "Dmitry Vasiliev", email = "contact.vasiliev.dmitry@gmail.com"},
+]
+maintainers = [
+    {name = "Dmitry Vasiliev", email = "contact.vasiliev.dmitry@gmail.com"},
+]
 keywords = ["Telegram", "Telegram Mini Apps", "Telegram Bot", "Poetry"]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -22,11 +35,12 @@ classifiers = [
     "Operating System :: OS Independent",
     "Topic :: Security",
 ]
-packages = [{include = "telegram_webapp_auth"}]
 
-[tool.poetry.dependencies]
-python = "^3.9.2"
-cryptography = ">=44,<47"
+[project.urls]
+homepage = "https://pypi.org/project/telegram-webapp-auth/"
+repository = "https://github.com/swimmwatch/telegram-webapp-auth"
+documentation = "https://swimmwatch.github.io/telegram-webapp-auth/"
+"Bug Tracker" = "https://github.com/swimmwatch/telegram-webapp-auth/issues"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.0.1"
@@ -56,9 +70,6 @@ freezegun = "^1.5.1"
 pytest-cov = ">=6,<8"
 pytest-benchmark = "^5.1.0"
 flake8-docstrings = "^1.7.0"
-
-[tool.poetry.requires-plugins]
-poetry-plugin-export = ">=1.9"
 
 [build-system]
 requires = ["poetry-core"]
