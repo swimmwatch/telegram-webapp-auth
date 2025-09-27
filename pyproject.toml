@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "telegram-webapp-auth"
-version = "3.0.6"
+version = "3.0.7"
 description = "Python package that implements Telegram Mini Apps authentication algorithms."
 documentation = "https://swimmwatch.github.io/telegram-webapp-auth/"
 authors = ["Dmitry Vasiliev <contact.vasiliev.dmitry@gmail.com>"]
@@ -16,6 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Operating System :: OS Independent",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -55,6 +56,9 @@ freezegun = "^1.5.1"
 pytest-cov = ">=6,<8"
 pytest-benchmark = "^5.1.0"
 flake8-docstrings = "^1.7.0"
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.9"
 
 [build-system]
 requires = ["poetry-core"]

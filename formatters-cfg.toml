@@ -1,5 +1,12 @@
 [tool.black]
 line-length = 120
+extend-exclude = """
+/(
+  | build
+  | dist
+  | .poetry
+)/
+"""
 target-version = ["py39"]
 
 [tool.flake8]
@@ -7,6 +14,7 @@ inline-quotes = "double"
 ignore = "E203, W503, S101, D100, D104"
 max-line-length = 120
 docstring-convention = "google"
+extend-exclude = ".venv, build, dist, migrations, .poetry"
 per-file-ignores = [
     "tests/*: D"
 ]
@@ -27,7 +35,10 @@ warn_unused_ignores = false
 check_untyped_defs = true
 no_implicit_reexport = true
 show_error_codes = true
+exclude = """
+(^|/)(\\.venv|build|dist|migrations|\\.poetry)(/|$)
+"""
 
 [bandit]
-exclude = "tests"
+exclude = "tests, .poetry"
 skips = "B101, B601"

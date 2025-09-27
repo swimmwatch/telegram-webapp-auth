@@ -23,7 +23,7 @@ format: black isort
 lint: flake mypy black-lint
 
 lock:
-	poetry lock --no-update
+	poetry lock
 
 install:
 	poetry install --no-root
