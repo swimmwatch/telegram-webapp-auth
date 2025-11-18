@@ -14,14 +14,14 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.x"]
-        poetry-version: ["1.8.5"]
+        poetry-version: ["2.2.1"]
     steps:
       - name: "Checkout"
         uses: actions/checkout@v5
       - name: "Install Poetry ${{matrix.poetry-version}}"
         run: pipx install poetry==${{matrix.poetry-version}}
       - name: "Setup Python ${{matrix.python-version}}"
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{matrix.python-version}}
           cache: 'poetry'
