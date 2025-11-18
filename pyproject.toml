@@ -1,31 +1,44 @@
 [tool.poetry]
 name = "telegram-webapp-auth"
-version = "3.0.6"
+packages = [{include = "telegram_webapp_auth"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+cryptography = ">=44"
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.9"
+
+[project]
+name = "telegram-webapp-auth"
+version = "3.0.7"
 description = "Python package that implements Telegram Mini Apps authentication algorithms."
-documentation = "https://swimmwatch.github.io/telegram-webapp-auth/"
-authors = ["Dmitry Vasiliev <contact.vasiliev.dmitry@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-homepage = "https://pypi.org/project/telegram-webapp-auth/"
-repository = "https://github.com/swimmwatch/telegram-webapp-auth"
+authors = [
+    {name = "Dmitry Vasiliev", email = "contact.vasiliev.dmitry@gmail.com"},
+]
+maintainers = [
+    {name = "Dmitry Vasiliev", email = "contact.vasiliev.dmitry@gmail.com"},
+]
 keywords = ["Telegram", "Telegram Mini Apps", "Telegram Bot", "Poetry"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Operating System :: OS Independent",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
     "Topic :: Security",
 ]
-packages = [{include = "telegram_webapp_auth"}]
 
-[tool.poetry.dependencies]
-python = "^3.9.2"
-cryptography = ">=44,<47"
+[project.urls]
+homepage = "https://pypi.org/project/telegram-webapp-auth/"
+repository = "https://github.com/swimmwatch/telegram-webapp-auth"
+documentation = "https://swimmwatch.github.io/telegram-webapp-auth/"
+"Bug Tracker" = "https://github.com/swimmwatch/telegram-webapp-auth/issues"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.0.1"
@@ -35,7 +48,6 @@ pydocstyle = "^6.3.0"
 isort = ">=5.13.2,<7.0.0"
 flake8-isort = "^6.1.1"
 flake8-quotes = "^3.4.0"
-flake8-string-format = "^0.3.0"
 pep8-naming = ">=0.14.1,<0.16.0"
 flake8-bandit = "^4.1.1"
 flake8-comprehensions = "^3.15.0"
@@ -55,6 +67,7 @@ freezegun = "^1.5.1"
 pytest-cov = ">=6,<8"
 pytest-benchmark = "^5.1.0"
 flake8-docstrings = "^1.7.0"
+bandit = "^1.9.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -66,4 +79,4 @@ default_section = "THIRDPARTY"
 force_single_line = true
 line_length = 120
 use_parentheses = true
-py_version=39
+py_version=310

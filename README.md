@@ -57,12 +57,12 @@ It is designed to be simple and easy to use, providing a straightforward way to 
 - **Type hints**: The package is fully typed, providing better code completion and type checking in your IDE.
 - **Well-documented**: The package comes with comprehensive documentation, making it easy to understand how to use it effectively.
 - **Tested**: The package includes unit tests to ensure that it works correctly and reliably.
-- **Supports Python 3.9+**: The package is compatible with Python 3.9 and later versions, ensuring that it works with modern Python environments.
+- **Supports Python 3.10+**: The package is compatible with Python 3.10 and later versions, ensuring that it works with modern Python environments.
 - **Open source**: The package is open source and licensed under the MIT License, allowing you to use it freely in your projects.
 
 
 ## Requirements
-- Python 3.9 or later
+- Python 3.10 or later
 
 ## Installation
 ```bash
