@@ -3,8 +3,8 @@ name = "telegram-webapp-auth"
 packages = [{include = "telegram_webapp_auth"}]
 
 [tool.poetry.dependencies]
-python = "^3.9.2"
-cryptography = ">=44,<47"
+python = "^3.10"
+cryptography = ">=44"
 
 [tool.poetry.requires-plugins]
 poetry-plugin-export = ">=1.9"
@@ -70,6 +70,7 @@ freezegun = "^1.5.1"
 pytest-cov = ">=6,<8"
 pytest-benchmark = "^5.1.0"
 flake8-docstrings = "^1.7.0"
+bandit = "^1.9.1"
 
 [build-system]
 requires = ["poetry-core"]
