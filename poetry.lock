@@ -687,21 +687,6 @@ flake8 = "*"
 setuptools = "*"
 
 [[package]]
-name = "flake8-string-format"
-version = "0.3.0"
-description = "string format checker, plugin for flake8"
-optional = false
-python-versions = "*"
-groups = ["dev"]
-files = [
-    {file = "flake8-string-format-0.3.0.tar.gz", hash = "sha256:65f3da786a1461ef77fca3780b314edb2853c377f2e35069723348c8917deaa2"},
-    {file = "flake8_string_format-0.3.0-py2.py3-none-any.whl", hash = "sha256:812ff431f10576a74c89be4e85b8e075a705be39bc40c4b4278b5b13e2afa9af"},
-]
-
-[package.dependencies]
-flake8 = "*"
-
-[[package]]
 name = "freezegun"
 version = "1.5.5"
 description = "Let your Python tests travel through time"
@@ -1941,4 +1926,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "1f22edfee34cffb8e208d0b161abab1e086efa201538d698b096292fb05f567e"
+content-hash = "763277cf7955d48efeb75a590910294ea941de8f98858aa92173d18cbb13cd4d"
