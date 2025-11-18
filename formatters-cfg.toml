@@ -7,7 +7,7 @@ extend-exclude = """
   | .poetry
 )/
 """
-target-version = ["py39"]
+target-version = ["py310"]
 
 [tool.flake8]
 inline-quotes = "double"
@@ -25,7 +25,7 @@ default_section = "THIRDPARTY"
 force_single_line = true
 line_length = 120
 use_parentheses = true
-py_version=39
+py_version=310
 
 [tool.mypy]
 ignore_missing_imports = true
