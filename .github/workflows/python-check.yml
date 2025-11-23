@@ -21,7 +21,7 @@ jobs:
         poetry-version: ["2.2.1"]
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: "Install Poetry ${{matrix.poetry-version}}"
         run: pipx install poetry==${{matrix.poetry-version}}
       - name: "Setup Python ${{matrix.python-version}}"
@@ -48,7 +48,7 @@ jobs:
         os: ["ubuntu-latest", "windows-latest", "macos-latest"]
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: "Setup Poetry ${{matrix.poetry-version}}"
         run: pipx install poetry==${{matrix.poetry-version}}
       - name: "Setup Python ${{matrix.python-version}}"
