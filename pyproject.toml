@@ -41,7 +41,7 @@ documentation = "https://swimmwatch.github.io/telegram-webapp-auth/"
 "Bug Tracker" = "https://github.com/swimmwatch/telegram-webapp-auth/issues"
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.19.0"
+mypy = "^1.19.1"
 flake8 = "7.3.0"
 black = ">=23.1,<26.0"
 pydocstyle = "^6.3.0"
