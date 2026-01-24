@@ -67,7 +67,7 @@ freezegun = "^1.5.1"
 pytest-cov = ">=6,<8"
 pytest-benchmark = "^5.1.0"
 flake8-docstrings = "^1.7.0"
-bandit = "^1.9.2"
+bandit = "^1.9.3"
 
 [build-system]
 requires = ["poetry-core"]
