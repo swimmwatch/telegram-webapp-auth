@@ -60,7 +60,7 @@ jobs:
       - name: "Install dependencies"
         run: make install
       - name: "Run pytest"
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v4
         with:
           timeout_seconds: 120
           max_attempts: 3
