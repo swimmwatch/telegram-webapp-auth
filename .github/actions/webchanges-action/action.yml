@@ -1,0 +1,85 @@
+name: "Web changes detector"
+author: "Dmitry Vasiliev"
+description: "Detect changes in web pages and notify via GitHub Actions"
+branding:
+  icon: "check-circle"
+  color: "blue"
+
+inputs:
+  config:
+    description: "Configuration for the web changes detector"
+    required: true
+  jobs:
+    description: "List of jobs to run for web changes detection"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Set up environment"
+      shell: bash
+      run: |
+        echo "WEBCHANGES_ACTION_DIR=${{ runner.temp }}/webchanges-action" >> "$GITHUB_ENV"
+        echo "CONFIG_PATH=${{ runner.temp }}/webchanges-action/config.yaml" >> "$GITHUB_ENV"
+        echo "JOBS_PATH=${{ runner.temp }}/webchanges-action/jobs.yaml" >> "$GITHUB_ENV"
+        echo "SNAPSHOTS_DIR=${{ runner.temp }}/webchanges-action-cache" >> "$GITHUB_ENV"
+        echo "SNAPSHOTS_DB=${{ runner.temp }}/webchanges-action-cache/snapshots.db" >> "$GITHUB_ENV"
+        echo "HOOKS_PATH=${{ github.action_path }}/hooks.py" >> "$GITHUB_ENV"
+        echo "WEBCHANGES_VERSION=3.36.1" >> "$GITHUB_ENV"
+        echo "PYTHON_VERSION=3.13" >> "$GITHUB_ENV"
+    - name: "Create work directories"
+      shell: bash
+      run: |
+        mkdir -p "$WEBCHANGES_ACTION_DIR" "$SNAPSHOTS_DIR"
+    - name: "Write configs to files"
+      shell: bash
+      run: |
+        cat > "$CONFIG_PATH" <<'WEBCHANGES_CONFIG'
+        ${{ inputs.config }}
+        WEBCHANGES_CONFIG
+        cat > "$JOBS_PATH" <<'WEBCHANGES_JOBS'
+        ${{ inputs.jobs }}
+        WEBCHANGES_JOBS
+    - name: "Setup Python"
+      uses: actions/setup-python@v6
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: "pip"
+    - name: "Install webchanges package"
+      shell: bash
+      run: |
+        pip install webchanges==${{ env.WEBCHANGES_VERSION }}
+    - name: "Compute cache key"
+      shell: bash
+      run: |
+        CONFIG_HASH=$(sha256sum "$CONFIG_PATH" "$JOBS_PATH" | sha256sum | awk '{ print $1 }')
+        echo "CACHE_PREFIX=${{ runner.os }}-webchanges-${CONFIG_HASH}-" >> "$GITHUB_ENV"
+        echo "CACHE_KEY=${{ runner.os }}-webchanges-${CONFIG_HASH}-${{ github.run_id }}-${{ github.run_attempt }}" >> "$GITHUB_ENV"
+    - name: "Restore cache snapshots database"
+      uses: actions/cache/restore@v5
+      with:
+        path: "${{ env.SNAPSHOTS_DIR }}"
+        key: "${{ env.CACHE_KEY }}"
+        restore-keys: |
+          ${{ env.CACHE_PREFIX }}
+    - name: "Check if snapshots database exists"
+      shell: bash
+      run: |
+        if [ ! -f "$SNAPSHOTS_DB" ]; then
+          echo "No snapshots database found, creating a new one."
+        else
+          echo "Snapshots database found, using existing one."
+        fi
+    - name: "Secure hooks file permissions"
+      shell: bash
+      run: |
+        chmod go-w "$HOOKS_PATH" "$(dirname "$HOOKS_PATH")"
+    - name: "Run web changes detection"
+      shell: bash
+      run: |
+        webchanges --config "$CONFIG_PATH" --jobs "$JOBS_PATH" --hooks "$HOOKS_PATH" --database "$SNAPSHOTS_DB"
+    - name: "Cache snapshots database"
+      uses: actions/cache/save@v5
+      with:
+        path: "${{ env.SNAPSHOTS_DIR }}"
+        key: "${{ env.CACHE_KEY }}"

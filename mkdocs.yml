@@ -1,56 +1,78 @@
-site_name: Telegram Web App Authorization
+site_name: Telegram Web App Auth
 site_url: https://swimmwatch.github.io/telegram-webapp-auth/
 site_author: Dmitry Vasiliev
 site_description: >-
-  Python package that implements Telegram Web authentication algorithm.
+  Python package for validating Telegram Mini App initData with bot-token and third-party authentication flows.
 
 repo_url: https://github.com/swimmwatch/telegram-webapp-auth
 repo_name: swimmwatch/telegram-webapp-auth
 
-copyright: Copyright &copy; 2023 - 2024 Dmitry Vasiliev
+copyright: Copyright &copy; 2023 - 2026 Dmitry Vasiliev
 
 theme:
   name: material
   language: en
+  icon:
+    logo: material/shield-check
+    repo: fontawesome/brands/github
   features:
+    - navigation.tabs
     - navigation.sections
     - navigation.indexes
     - navigation.footer
+    - navigation.top
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
     - content.code.copy
+    - content.code.select
+    - content.code.annotate
+    - content.tabs.link
   palette:
     - media: "(prefers-color-scheme: light)"
-      scheme: slate
-      primary: deep blue
-      accent: blue
-      toggle:
-        icon: material/lightbulb-outline
-        name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
       scheme: default
       primary: blue
-      accent: deep blue
+      accent: cyan
       toggle:
-        icon: material/lightbulb
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue
+      accent: cyan
+      toggle:
+        icon: material/weather-sunny
         name: Switch to light mode
 
 extra:
+  generator: false
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/swimmwatch/telegram-webapp-auth/
+      name: telegram-webapp-auth on GitHub
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/telegram-webapp-auth/
+      name: telegram-webapp-auth on PyPI
+    - icon: fontawesome/brands/telegram
+      link: https://core.telegram.org/bots/webapps
+      name: Telegram Mini Apps documentation
 
 nav:
   - Home: index.md
   - Guide:
       - Installation: guide/install.md
+      - Quick Start: guide/quick-start.md
+      - Third-Party Validation: guide/third-party.md
+      - Error Handling: guide/error-handling.md
       - Examples:
-          - Django: guide/examples/django.md
           - FastAPI: guide/examples/fastapi.md
-  - References:
-      - Authorization: references/auth.md
-      - Data: references/data.md
-      - Errors: references/errors.md
+          - Django: guide/examples/django.md
+  - API Reference:
+      - Authenticator: references/auth.md
+      - Data Models: references/data.md
+      - Exceptions: references/errors.md
+      - Coverage: coverage.md
   - License: license.md
 
 plugins:
@@ -69,7 +91,22 @@ plugins:
         remove_comments: true
       cache_safe: true
 
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
 markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -77,3 +114,7 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true

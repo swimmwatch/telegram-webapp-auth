@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.x"]
-        poetry-version: ["2.2.1"]
+        poetry-version: ["2.3.2"]
     steps:
       - name: "Checkout"
         uses: actions/checkout@v6
@@ -27,6 +27,8 @@ jobs:
           cache: 'poetry'
       - name: "Install dependencies"
         run: make install
+      - name: "Generate coverage report"
+        run: poetry run pytest --cov=telegram_webapp_auth --cov-branch --cov-report=html tests
       - name: "Configure Git Credentials"
         run: |
           git config user.name github-actions[bot]

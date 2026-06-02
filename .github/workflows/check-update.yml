@@ -2,9 +2,10 @@ name: "Check Telegram Mini App documentation updates"
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 6 * * *'
 
 permissions:
+  contents: read
   issues: write
 
 jobs:
@@ -13,18 +14,32 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Check Telegram Mini App documentation updates
-        uses: swimmwatch/webchanges-action@v1.0.1
+        uses: ./.github/actions/webchanges-action
         with:
           jobs: |
             name: Telegram Mini App documentation
             url: https://core.telegram.org/bots/webapps
             use_browser: false
+            ignore_timeout_errors: true
+            ignore_http_error_codes: "5xx"
+            headers:
+              User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36
+              Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+              Accept-Language: en-US,en;q=0.9
             filters:
               - html2text
               - between:
                   start: "#### __WebAppInitData"
                   end: "#### __Events Available for Mini Apps"
           config: |
+            display:
+              error: false
+            job_defaults:
+              all:
+                suppress_repeated_errors: true
+              url:
+                ignore_timeout_errors: true
+                ignore_http_error_codes: "5xx"
             report:
               tz: UTC
               github_issue:
@@ -34,6 +49,7 @@ jobs:
                 token: "${{ secrets.GITHUB_TOKEN }}"
                 format_dt: "%Y-%m-%d"
                 title: "Telegram Mini App documentation update: {dt}"
+                deduplicate_by_title: true
                 assignees: 
                   - "swimmwatch"
                 format_content: |
