@@ -12,7 +12,7 @@ from datetime import timedelta
 from telegram_webapp_auth.auth import TelegramAuthenticator
 from telegram_webapp_auth.errors import InvalidInitDataError
 
-authenticator = TelegramAuthenticator(secret=b"")
+authenticator = TelegramAuthenticator()
 
 try:
     init_data = authenticator.validate_third_party(
@@ -24,9 +24,9 @@ except InvalidInitDataError:
     raise PermissionError("Telegram init data is invalid")
 ```
 
-!!! info "The secret is unused in this flow"
+!!! info "No bot token required"
 
-    `TelegramAuthenticator` still requires a `secret` argument because the same class also supports bot-token validation. For `validate_third_party()`, the secret is not used.
+    `validate_third_party()` uses Telegram's public keys and the bot ID, so the authenticator can be created without a bot token-derived secret.
 
 ## Test Environment
 

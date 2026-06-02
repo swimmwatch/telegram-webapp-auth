@@ -50,7 +50,7 @@ It implements Telegram's official Mini Apps authentication algorithms, supports 
 - Bot-token validation with `TelegramAuthenticator.validate()`
 - Third-party Ed25519 validation with `TelegramAuthenticator.validate_third_party()`
 - Optional expiry checks with `expr_in`
-- Typed `WebAppInitData`, `WebAppUser`, and `WebAppChat` results
+- Typed `WebAppInitData`, `WebAppUser`, and `WebAppChat` results, with unknown top-level fields preserved
 - Python 3.10+ support
 - Lightweight runtime dependency set
 

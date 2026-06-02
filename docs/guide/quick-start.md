@@ -45,7 +45,7 @@ def authenticate(init_data_raw: str):
 
 ## 3. Use Parsed Data
 
-`validate()` returns `WebAppInitData`. User, receiver, and chat fields are parsed into typed dataclasses when present.
+`validate()` returns `WebAppInitData`. User, receiver, and chat fields are parsed into typed dataclasses when present. Top-level Telegram fields that are not yet modeled are preserved in `init_data.extra`.
 
 ```python
 init_data = authenticate(init_data_raw)
