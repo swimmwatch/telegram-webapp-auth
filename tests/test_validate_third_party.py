@@ -38,8 +38,8 @@ _TEST_BOT_ID = 7544535829
 def test_parse(
     test_input: str,
     expected_err: typing.Optional[typing.Type[Exception]],
-    authenticator: TelegramAuthenticator,
 ) -> None:
+    authenticator = TelegramAuthenticator()
     if expected_err:
         with pytest.raises(expected_err):
             authenticator.validate_third_party(test_input, _TEST_BOT_ID)
@@ -63,15 +63,15 @@ def test_parse(
         # Test case 3: not expired
         (
             timedelta(seconds=0),
-            None,
+            ExpiredInitDataError,
         ),
     ],
 )
 def test_parse_expire(
-    authenticator: TelegramAuthenticator,
     expr_in: typing.Optional[timedelta],
     expected_err: typing.Optional[typing.Type[Exception]],
 ) -> None:
+    authenticator = TelegramAuthenticator()
     if expected_err:
         with pytest.raises(expected_err):
             authenticator.validate_third_party(_TEST_INIT_DATA, _TEST_BOT_ID, expr_in)
@@ -79,11 +79,29 @@ def test_parse_expire(
         authenticator.validate_third_party(_TEST_INIT_DATA, _TEST_BOT_ID, expr_in)
 
 
+@pytest.mark.parametrize(
+    "test_input",
+    [
+        "&".join(part for part in _TEST_INIT_DATA.split("&") if not part.startswith("signature=")),
+        _TEST_INIT_DATA.replace(
+            "signature=s72bv8J1hwJanbDqlo9TTMK6Uf4WSwQKuPKK_Q16QBhKD0hfOfoYCOpRl_d8m_8AEI1_oF-9WCJuwW1KQy5-BA",
+            "signature=!!!!",
+        ),
+    ],
+)
+def test_validate_third_party_rejects_invalid_signature(test_input: str) -> None:
+    authenticator = TelegramAuthenticator()
+
+    with pytest.raises(InvalidInitDataError):
+        authenticator.validate_third_party(test_input, _TEST_BOT_ID)
+
+
 @pytest.mark.benchmark
-def test_validate_third_party_performance(benchmark, authenticator: TelegramAuthenticator):
+def test_validate_third_party_performance(benchmark):
+    authenticator = TelegramAuthenticator()
     benchmark.pedantic(
         authenticator.validate_third_party,
-        args=(_TEST_INIT_DATA, _TEST_BOT_ID, timedelta(seconds=0)),
+        args=(_TEST_INIT_DATA, _TEST_BOT_ID),
         rounds=100,
         iterations=10,
         warmup_rounds=10,
