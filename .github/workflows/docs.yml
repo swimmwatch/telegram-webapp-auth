@@ -14,10 +14,10 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.x"]
-        poetry-version: ["2.2.1"]
+        poetry-version: ["2.3.2"]
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: "Install Poetry ${{matrix.poetry-version}}"
         run: pipx install poetry==${{matrix.poetry-version}}
       - name: "Setup Python ${{matrix.python-version}}"
@@ -27,13 +27,15 @@ jobs:
           cache: 'poetry'
       - name: "Install dependencies"
         run: make install
+      - name: "Generate coverage report"
+        run: poetry run pytest --cov=telegram_webapp_auth --cov-branch --cov-report=html tests
       - name: "Configure Git Credentials"
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
       - run: |
           echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           key: mkdocs-material-${{ env.cache_id }}
           path: .cache

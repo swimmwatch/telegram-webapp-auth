@@ -39,6 +39,7 @@ class WebAppUser:
 class ChatType(str, enum.Enum):
     """Represents the type of Telegram chat."""
 
+    SENDER = "sender"
     PRIVATE = "private"
     GROUP = "group"
     SUPERGROUP = "supergroup"
@@ -69,8 +70,8 @@ class WebAppInitData:
     """
 
     auth_date: int
-    hash: str
-    signature: str
+    hash: typing.Optional[str] = None
+    signature: typing.Optional[str] = None
     query_id: typing.Optional[str] = None
     user: typing.Optional[WebAppUser] = None
     receiver: typing.Optional[WebAppUser] = None
@@ -79,3 +80,4 @@ class WebAppInitData:
     chat_instance: typing.Optional[str] = None
     start_param: typing.Optional[str] = None
     can_send_after: typing.Optional[int] = None
+    extra: dict[str, str] = dataclasses.field(default_factory=dict)

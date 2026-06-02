@@ -6,10 +6,10 @@ We release security updates for the latest stable version of this project. Older
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability, please report it by emailing the maintainers or opening a private issue on GitHub. Do **not** disclose security issues publicly until they have been reviewed and patched.
-- Telegram: [https://t.me/contact_vasiliev_dmitry]
-- Email: [contact.vasiliev.dmitry@gmail.com]
-- GitHub: [https://github.com/swimmwatch/telegram-webapp-auth/issues]
+If you discover a security vulnerability, please report it privately to the maintainers. Do **not** disclose security issues publicly until they have been reviewed and patched.
+
+- Telegram: [contact_vasiliev_dmitry](https://t.me/contact_vasiliev_dmitry)
+- Email: [contact.vasiliev.dmitry@gmail.com](mailto:contact.vasiliev.dmitry@gmail.com)
 
 We will respond as quickly as possible and keep you informed of the progress.
 
