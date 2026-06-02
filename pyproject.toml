@@ -6,7 +6,7 @@ poetry-plugin-export = ">=1.10.0"
 
 [project]
 name = "telegram-webapp-auth"
-version = "3.0.7"
+version = "3.1.0"
 description = "Python package that implements Telegram Mini Apps authentication algorithms."
 license = "MIT"
 readme = "README.md"
