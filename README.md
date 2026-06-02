@@ -11,11 +11,11 @@
     <a href="https://pypi.org/project/telegram-webapp-auth">
         <img src="https://img.shields.io/pypi/v/telegram-webapp-auth.svg" alt="PyPI">
     </a>
-    <a href="pyproject.toml">
+    <a href="https://pypi.org/project/telegram-webapp-auth">
         <img src="https://img.shields.io/pypi/pyversions/telegram-webapp-auth" alt="Supported Python Versions">
     </a>
     <br/>
-    <a href="LICENSE">
+    <a href="https://github.com/swimmwatch/telegram-webapp-auth/blob/dev/LICENSE">
         <img src="https://img.shields.io/github/license/swimmwatch/telegram-webapp-auth" alt="License">
     </a>
     <a href="https://github.com/ambv/black">
@@ -27,18 +27,12 @@
     <a href="https://github.com/python/mypy">
         <img src="https://img.shields.io/badge/type%20checker-mypy-black" alt="Type checker">
     </a>
-    <a href="https://snyk.io/advisor/python/telegram-webapp-auth">
-        <img src="https://snyk.io/advisor/python/telegram-webapp-auth/badge.svg" alt="Package health">
-    </a>
     <br/>
     <a href="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/python-check.yml">
         <img src="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/python-check.yml/badge.svg" alt="Tests">
     </a>
     <a href="https://codecov.io/github/swimmwatch/telegram-webapp-auth" target="_blank">
         <img src="https://codecov.io/github/swimmwatch/telegram-webapp-auth/graph/badge.svg?token=M638BMDY5V" alt="Coverage">
-    </a>
-    <a href="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/release.yml">
-        <img src="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/release.yml/badge.svg" alt="Release">
     </a>
     <a href="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/docs.yml">
         <img src="https://github.com/swimmwatch/telegram-webapp-auth/actions/workflows/docs.yml/badge.svg" alt="Docs">
@@ -47,24 +41,21 @@
 </div>
 <!-- markdownlint-enable -->
 
-This Python package implements [Telegram Mini Apps authentication algorithms](https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app).
-It is designed to be simple and easy to use, providing a straightforward way to authenticate users in Telegram Mini Apps.
+`telegram-webapp-auth` validates Telegram Mini App `initData` in Python.
+
+It implements Telegram's official Mini Apps authentication algorithms, supports both bot-token and third-party validation flows, and returns typed dataclasses for users, chats, and init data.
 
 ## Features
-- **Easy to use**: The package is designed to be simple and intuitive, making it easy to integrate into your Telegram Mini App.
-- **Secure**: It implements the authentication algorithms as described in the Telegram Mini Apps documentation, ensuring that your app's authentication is secure.
-- **Lightweight**: The package is small, making it easy to include in your project without adding unnecessary bloat.
-- **Type hints**: The package is fully typed, providing better code completion and type checking in your IDE.
-- **Well-documented**: The package comes with comprehensive documentation, making it easy to understand how to use it effectively.
-- **Tested**: The package includes unit tests to ensure that it works correctly and reliably.
-- **Supports Python 3.10+**: The package is compatible with Python 3.10 and later versions, ensuring that it works with modern Python environments.
-- **Open source**: The package is open source and licensed under the MIT License, allowing you to use it freely in your projects.
 
-
-## Requirements
-- Python 3.10 or later
+- Bot-token validation with `TelegramAuthenticator.validate()`
+- Third-party Ed25519 validation with `TelegramAuthenticator.validate_third_party()`
+- Optional expiry checks with `expr_in`
+- Typed `WebAppInitData`, `WebAppUser`, and `WebAppChat` results
+- Python 3.10+ support
+- Lightweight runtime dependency set
 
 ## Installation
+
 ```bash
 pip install telegram-webapp-auth
 # or
@@ -73,8 +64,47 @@ poetry add telegram-webapp-auth
 uv add telegram-webapp-auth
 ```
 
+## Quick Start
+
+```python
+from datetime import timedelta
+
+from telegram_webapp_auth.auth import TelegramAuthenticator
+from telegram_webapp_auth.auth import generate_secret_key
+from telegram_webapp_auth.errors import ExpiredInitDataError
+from telegram_webapp_auth.errors import InvalidInitDataError
+
+secret_key = generate_secret_key("123456:ABC-DEF")
+authenticator = TelegramAuthenticator(secret_key)
+
+try:
+    init_data = authenticator.validate(
+        init_data=request.headers["Authorization"],
+        expr_in=timedelta(minutes=5),
+    )
+except ExpiredInitDataError:
+    raise PermissionError("Telegram init data has expired")
+except InvalidInitDataError:
+    raise PermissionError("Telegram init data is invalid")
+
+telegram_user = init_data.user
+```
+
 ## Documentation
-For detailed documentation, please visit the [telegram-webapp-auth documentation](https://swimmwatch.github.io/telegram-webapp-auth/).
+
+Read the full documentation at [swimmwatch.github.io/telegram-webapp-auth](https://swimmwatch.github.io/telegram-webapp-auth/).
+
+Useful starting points:
+
+- [Installation](https://swimmwatch.github.io/telegram-webapp-auth/guide/install/)
+- [Quick start](https://swimmwatch.github.io/telegram-webapp-auth/guide/quick-start/)
+- [Third-party validation](https://swimmwatch.github.io/telegram-webapp-auth/guide/third-party/)
+- [API reference](https://swimmwatch.github.io/telegram-webapp-auth/references/auth/)
+
+## Maintenance And Security
+
+This project is in maintenance mode and accepts bug fixes. Please report security issues privately; see [SECURITY.md](SECURITY.md).
 
 ## License
-`telegram-webapp-auth` is licensed under the [MIT License](LICENSE).
+
+`telegram-webapp-auth` is licensed under the [MIT License](https://github.com/swimmwatch/telegram-webapp-auth/blob/dev/LICENSE).

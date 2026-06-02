@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        poetry-version: ["2.2.1"]
+        poetry-version: ["2.3.2"]
     steps:
       - name: "Checkout"
         uses: actions/checkout@v6

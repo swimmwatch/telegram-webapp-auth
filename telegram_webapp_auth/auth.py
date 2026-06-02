@@ -73,7 +73,7 @@ class TelegramAuthenticator:
             https://core.telegram.org/bots/webapps#webappinitdata
 
         Raises:
-            InvalidInitDataError
+            InvalidInitDataError: if the JSON string cannot be decoded.
         """
         try:
             return json.loads(unquote(data))

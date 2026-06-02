@@ -19,6 +19,7 @@ _TEST_INIT_DATA = (
 )
 _TEST_TOKEN = "5768337691:AAH5YkoiEuPk8-FZa32hStHTqXiLPtAEhx8"  # noqa: S105
 _TEST_SECRET = generate_secret_key(_TEST_TOKEN)
+_DEFAULT_AUTH_DATE = datetime(2021, 1, 1, tzinfo=timezone.utc)
 _HASH_REGEX = re.compile(r"hash=\w+")
 
 
@@ -36,7 +37,7 @@ def make_hash(data_check_string: str) -> str:
 
 def make_init_data(auth_date: typing.Optional[datetime] = None) -> str:
     if not auth_date:
-        auth_date = datetime.now(tz=timezone.utc)
+        auth_date = _DEFAULT_AUTH_DATE
 
     unix_time = int(auth_date.timestamp())
     init_data = _TEST_INIT_DATA.format(auth_date=unix_time)

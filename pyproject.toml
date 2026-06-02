@@ -1,13 +1,8 @@
 [tool.poetry]
-name = "telegram-webapp-auth"
 packages = [{include = "telegram_webapp_auth"}]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-cryptography = ">=44"
-
 [tool.poetry.requires-plugins]
-poetry-plugin-export = ">=1.9"
+poetry-plugin-export = ">=1.10.0"
 
 [project]
 name = "telegram-webapp-auth"
@@ -15,6 +10,7 @@ version = "3.0.7"
 description = "Python package that implements Telegram Mini Apps authentication algorithms."
 license = "MIT"
 readme = "README.md"
+requires-python = ">=3.10,<4.0"
 authors = [
     {name = "Dmitry Vasiliev", email = "contact.vasiliev.dmitry@gmail.com"},
 ]
@@ -30,8 +26,10 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Operating System :: OS Independent",
-    "License :: OSI Approved :: MIT License",
     "Topic :: Security",
+]
+dependencies = [
+    "cryptography>=48.0.0",
 ]
 
 [project.urls]
@@ -41,9 +39,9 @@ documentation = "https://swimmwatch.github.io/telegram-webapp-auth/"
 "Bug Tracker" = "https://github.com/swimmwatch/telegram-webapp-auth/issues"
 
 [tool.poetry.group.dev.dependencies]
-mypy = "^1.19.1"
+mypy = "^2.1.0"
 flake8 = "7.3.0"
-black = ">=23.1,<27.0"
+black = ">=26.5.1,<27.0"
 pydocstyle = "^6.3.0"
 isort = ">=5.13.2,<9.0.0"
 flake8-isort = "^7.0.0"
@@ -53,24 +51,24 @@ flake8-bandit = "^4.1.1"
 flake8-comprehensions = "^3.15.0"
 flake8-pyproject = "^1.2.4"
 typing-extensions = "^4.12.2"
-mkdocs-material = "^9.7.5"
-mkdocstrings = {extras = ["python"], version = ">=0.29.1,<0.31.0"}
-mkdocstrings-python = "^1.19.0"
+mkdocs-material = "^9.7.6"
+mkdocstrings = {extras = ["python"], version = "^1.0.4"}
+mkdocstrings-python = "^2.0.3"
 mkdocs-coverage = ">=1.1,<3.0"
-mkdocs-section-index = "^0.3.9"
+mkdocs-section-index = "^0.3.12"
 mkdocs = "^1.6.1"
 mkdocs-macros-plugin = "^1.2.0"
 mkdocs-minify-plugin = "^0.8.0"
-pytest = "^9.0.2"
+pytest = "^9.0.3"
 pytest-xdist = "^3.6.1"
 freezegun = "^1.5.1"
-pytest-cov = ">=6,<8"
+pytest-cov = ">=7.1.0,<8.0.0"
 pytest-benchmark = "^5.1.0"
 flake8-docstrings = "^1.7.0"
 bandit = "^1.9.4"
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=2.4.1,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.isort]

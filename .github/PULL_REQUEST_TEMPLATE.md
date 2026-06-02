@@ -1,4 +1,4 @@
-THIS PROJECT IS IN MAINTENANCE MODE. We accept pull-requests for Bug Fixes **ONLY**. NO NEW FEATURES ACCEPTED!
+THIS PROJECT IS IN MAINTENANCE MODE. We accept pull requests for bug fixes **only**. New features are not accepted.
 
 <!--- Provide a general summary of your changes in the Title above -->
 
@@ -7,7 +7,6 @@ THIS PROJECT IS IN MAINTENANCE MODE. We accept pull-requests for Bug Fixes **ONL
 
 ## Related Issue
 <!--- This project only accepts pull requests related to open issues -->
-<!--- If suggesting a new feature or change, please discuss it in an issue first -->
 <!--- If fixing a bug, there should be an issue describing it with steps to reproduce -->
 <!--- Please link to the issue here: -->
 
