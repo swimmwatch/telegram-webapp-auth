@@ -15,6 +15,41 @@ from webchanges.reporters import MarkdownReporter
 logger = logging.getLogger(__name__)
 
 
+def _patch_webchanges_config_schema() -> None:
+    """Patch webchanges github_issue schema at runtime to accept custom dedupe option."""
+    try:
+        from webchanges import storage
+        from webchanges.storage import _config as webchanges_config
+    except Exception as exc:  # pragma: no cover - import issues should not break the action
+        logger.debug("Cannot import webchanges config schema module: %s", exc)
+        return
+
+    config = getattr(webchanges_config, "_ConfigReportGithubIssue", None)
+    if config is None:
+        return
+
+    annotations = getattr(config, "__annotations__", None)
+    if not isinstance(annotations, dict) or "deduplicate_by_title" in annotations:
+        return
+
+    annotations["deduplicate_by_title"] = bool
+
+    required_keys = getattr(config, "__required_keys__", frozenset())
+    optional_keys = getattr(config, "__optional_keys__", frozenset())
+    if isinstance(required_keys, frozenset):
+        config.__required_keys__ = frozenset(required_keys - {"deduplicate_by_title"})
+    if isinstance(optional_keys, frozenset):
+        config.__optional_keys__ = frozenset(optional_keys | {"deduplicate_by_title"})
+
+    if hasattr(storage, "_config") and isinstance(webchanges_config.DEFAULT_CONFIG, dict):
+        github_issue_defaults = webchanges_config.DEFAULT_CONFIG.get("report", {}).get("github_issue")
+        if isinstance(github_issue_defaults, dict):
+            github_issue_defaults.setdefault("deduplicate_by_title", False)
+
+
+_patch_webchanges_config_schema()
+
+
 class GitHubIssueReporter(MarkdownReporter):
     """Reporter that submits reports as issues to a GitHub repository."""
 

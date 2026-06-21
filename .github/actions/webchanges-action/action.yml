@@ -77,7 +77,45 @@ runs:
     - name: "Run web changes detection"
       shell: bash
       run: |
-        webchanges --config "$CONFIG_PATH" --jobs "$JOBS_PATH" --hooks "$HOOKS_PATH" --database "$SNAPSHOTS_DB"
+        python - <<'PY'
+        import os
+        import sys
+
+        from webchanges.storage import _config as webchanges_config
+
+        # Allow webchanges 3.36.1 to accept the custom dedupe option from hooks.py.
+        annotations = webchanges_config._ConfigReportGithubIssue.__annotations__
+        annotations.setdefault("deduplicate_by_title", bool)
+        required_keys = getattr(webchanges_config._ConfigReportGithubIssue, "__required_keys__", frozenset())
+        optional_keys = getattr(webchanges_config._ConfigReportGithubIssue, "__optional_keys__", frozenset())
+        if isinstance(required_keys, frozenset):
+            webchanges_config._ConfigReportGithubIssue.__required_keys__ = frozenset(
+                required_keys - {"deduplicate_by_title"},
+            )
+        if isinstance(optional_keys, frozenset):
+            webchanges_config._ConfigReportGithubIssue.__optional_keys__ = frozenset(
+                optional_keys | {"deduplicate_by_title"},
+            )
+
+        github_issue_defaults = webchanges_config.DEFAULT_CONFIG.get("report", {}).get("github_issue")
+        if isinstance(github_issue_defaults, dict):
+            github_issue_defaults.setdefault("deduplicate_by_title", False)
+
+        from webchanges.cli import main as webchanges_main
+
+        sys.argv = [
+            "webchanges",
+            "--config",
+            os.environ["CONFIG_PATH"],
+            "--jobs",
+            os.environ["JOBS_PATH"],
+            "--hooks",
+            os.environ["HOOKS_PATH"],
+            "--database",
+            os.environ["SNAPSHOTS_DB"],
+        ]
+        raise SystemExit(webchanges_main())
+        PY
     - name: "Cache snapshots database"
       uses: actions/cache/save@v5
       with:
