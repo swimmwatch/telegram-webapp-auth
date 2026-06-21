@@ -2,6 +2,10 @@
 
 `telegram-webapp-auth` supports Python 3.10 and newer. It has one runtime dependency: `cryptography`, which is used for Telegram's Ed25519 third-party validation flow.
 
+!!! success "Current release"
+
+    Install `telegram-webapp-auth` `3.2.1` for the latest published package and documentation.
+
 ## :material-list-status: Requirements
 
 - Python 3.10+
