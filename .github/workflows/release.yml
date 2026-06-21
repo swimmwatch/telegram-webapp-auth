@@ -15,7 +15,7 @@ jobs:
         poetry-version: ["2.3.2"]
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: "Setup Python"
         uses: actions/setup-python@v6
       - name: "Setup Poetry ${{matrix.poetry-version}}"
