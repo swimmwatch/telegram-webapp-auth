@@ -4,6 +4,10 @@ Validate Telegram Mini App `initData` in Python with a small, typed, security-fo
 
 `telegram-webapp-auth` implements the validation algorithms from the official Telegram Mini Apps documentation and returns structured dataclasses for users, chats, and init data.
 
+!!! success "Current release: 3.2.1"
+
+    The published package, documentation, and `master` branch are aligned for release `3.2.1`.
+
 <div class="grid cards" markdown>
 
 -   :material-shield-check: **Bot-token validation**
