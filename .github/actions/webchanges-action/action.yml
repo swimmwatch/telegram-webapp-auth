@@ -53,8 +53,8 @@ runs:
       shell: bash
       run: |
         CONFIG_HASH=$(sha256sum "$CONFIG_PATH" "$JOBS_PATH" | sha256sum | awk '{ print $1 }')
-        echo "CACHE_PREFIX=${{ runner.os }}-webchanges-${CONFIG_HASH}-" >> "$GITHUB_ENV"
-        echo "CACHE_KEY=${{ runner.os }}-webchanges-${CONFIG_HASH}-${{ github.run_id }}-${{ github.run_attempt }}" >> "$GITHUB_ENV"
+        echo "CACHE_PREFIX=${{ runner.os }}-webchanges-" >> "$GITHUB_ENV"
+        echo "CACHE_KEY=${{ runner.os }}-webchanges-${CONFIG_HASH}-state" >> "$GITHUB_ENV"
     - name: "Restore cache snapshots database"
       uses: actions/cache/restore@v5
       with:
@@ -77,7 +77,11 @@ runs:
     - name: "Run web changes detection"
       shell: bash
       run: |
-        webchanges --config "$CONFIG_PATH" --jobs "$JOBS_PATH" --hooks "$HOOKS_PATH" --database "$SNAPSHOTS_DB"
+        webchanges \
+          --config "$CONFIG_PATH" \
+          --jobs "$JOBS_PATH" \
+          --hooks "$HOOKS_PATH" \
+          --database "$SNAPSHOTS_DB"
     - name: "Cache snapshots database"
       uses: actions/cache/save@v5
       with:
