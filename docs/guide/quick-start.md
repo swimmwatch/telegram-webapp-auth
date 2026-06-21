@@ -1,8 +1,8 @@
-# Quick Start
+# :material-rocket-launch: Quick Start
 
 This guide covers the standard Telegram Mini App backend flow: your backend receives `initData`, validates it with your bot token-derived secret, and then uses the parsed Telegram user data.
 
-## 1. Create An Authenticator
+## :material-key-chain: 1. Create An Authenticator
 
 Generate a secret key from your bot token once, then reuse the authenticator in your request handlers.
 
@@ -20,7 +20,7 @@ authenticator = TelegramAuthenticator(secret_key)
 
     Telegram `initData` is a signed query string. Always call `validate()` before trusting fields like `user.id`, `username`, or `auth_date`.
 
-## 2. Validate `initData`
+## :material-shield-check: 2. Validate `initData`
 
 In most backends, the frontend sends `window.Telegram.WebApp.initData` in an `Authorization` header or request body.
 
@@ -43,7 +43,7 @@ def authenticate(init_data_raw: str):
         raise PermissionError("Telegram init data is invalid")
 ```
 
-## 3. Use Parsed Data
+## :material-account-details: 3. Use Parsed Data
 
 `validate()` returns `WebAppInitData`. User, receiver, and chat fields are parsed into typed dataclasses when present. Top-level Telegram fields that are not yet modeled are preserved in `init_data.extra`.
 
@@ -58,7 +58,7 @@ display_name = init_data.user.first_name
 username = init_data.user.username
 ```
 
-## Standard Flow Checklist
+## :material-list-check: Standard Flow Checklist
 
 - Store the bot token in a secret manager or environment variable.
 - Generate the secret key on the backend.

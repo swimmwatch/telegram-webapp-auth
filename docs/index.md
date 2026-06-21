@@ -24,7 +24,7 @@ Validate Telegram Mini App `initData` in Python with a small, typed, security-fo
 
 </div>
 
-## Install
+## :material-download: Install
 
 === "pip"
 
@@ -44,7 +44,7 @@ Validate Telegram Mini App `initData` in Python with a small, typed, security-fo
     uv add telegram-webapp-auth
     ```
 
-## Quick Example
+## :material-rocket-launch: Quick Example
 
 ```python
 from datetime import timedelta
@@ -76,7 +76,7 @@ telegram_user = init_data.user
     Use `validate()` for the standard Mini App backend flow with your bot token.
     Use `validate_third_party()` when you validate data for third-party use with a bot ID and Telegram public key signature.
 
-## Documentation Map
+## :material-map-marker-outline: Documentation Map
 
 - [Installation](guide/install.md) explains requirements, package managers, and environment setup.
 - [Quick start](guide/quick-start.md) shows the standard bot-token validation flow.
@@ -85,7 +85,7 @@ telegram_user = init_data.user
 - [FastAPI](guide/examples/fastapi.md) and [Django](guide/examples/django.md) show framework integration patterns.
 - [API reference](references/auth.md) documents the public Python API.
 
-## Project Links
+## :material-link: Project Links
 
 - [GitHub repository](https://github.com/swimmwatch/telegram-webapp-auth)
 - [PyPI package](https://pypi.org/project/telegram-webapp-auth/)

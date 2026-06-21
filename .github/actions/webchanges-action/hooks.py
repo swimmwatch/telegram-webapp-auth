@@ -15,10 +15,11 @@ from webchanges.reporters import MarkdownReporter
 logger = logging.getLogger(__name__)
 
 
-class GitHubIssueReporter(MarkdownReporter):
+class TelegramDocsGitHubIssueReporter(MarkdownReporter):
     """Reporter that submits reports as issues to a GitHub repository."""
 
     __kind__ = "github_issue"
+    _DEDUPLICATE_BY_TITLE = True
 
     config: TypedDict(
         "_ConfigReportGithubIssue",
@@ -34,7 +35,6 @@ class GitHubIssueReporter(MarkdownReporter):
             "assignees": typing.Optional[typing.Sequence[str]],
             "type": typing.Optional[str],
             "milestone": typing.Optional[str],
-            "deduplicate_by_title": typing.Optional[bool],
         },
     )
 
@@ -176,8 +176,7 @@ class GitHubIssueReporter(MarkdownReporter):
         """Create a GitHub issue or update an existing same-title issue."""
         title = self._format_title()
         content = self._format_text(content)
-
-        if self.config.get("deduplicate_by_title", False):
+        if self.config.get("deduplicate_by_title", self._DEDUPLICATE_BY_TITLE):
             issue_number = self._find_open_issue_by_title(title)
             if issue_number is not None:
                 self._update_issue(issue_number, content)
