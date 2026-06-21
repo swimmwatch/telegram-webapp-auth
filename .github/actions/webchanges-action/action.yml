@@ -83,23 +83,43 @@ runs:
 
         from webchanges.storage import _config as webchanges_config
 
-        # Allow webchanges 3.36.1 to accept the custom dedupe option from hooks.py.
-        annotations = webchanges_config._ConfigReportGithubIssue.__annotations__
-        annotations.setdefault("deduplicate_by_title", bool)
-        required_keys = getattr(webchanges_config._ConfigReportGithubIssue, "__required_keys__", frozenset())
-        optional_keys = getattr(webchanges_config._ConfigReportGithubIssue, "__optional_keys__", frozenset())
-        if isinstance(required_keys, frozenset):
-            webchanges_config._ConfigReportGithubIssue.__required_keys__ = frozenset(
-                required_keys - {"deduplicate_by_title"},
-            )
-        if isinstance(optional_keys, frozenset):
-            webchanges_config._ConfigReportGithubIssue.__optional_keys__ = frozenset(
-                optional_keys | {"deduplicate_by_title"},
-            )
 
-        github_issue_defaults = webchanges_config.DEFAULT_CONFIG.get("report", {}).get("github_issue")
-        if isinstance(github_issue_defaults, dict):
-            github_issue_defaults.setdefault("deduplicate_by_title", False)
+        def _allow_missing_key() -> bool:
+            """Patch runtime schema to allow the custom dedupe key."""
+            report_cls = getattr(webchanges_config, "_ConfigReportGithubIssue", None)
+            if report_cls is None:
+                return False
+
+            annotations = getattr(report_cls, "__annotations__", None)
+            if not isinstance(annotations, dict):
+                return False
+
+            annotations.setdefault("deduplicate_by_title", bool)
+
+            for key_name in ("__required_keys__", "__optional_keys__"):
+                schema_keys = getattr(report_cls, key_name, frozenset())
+                if isinstance(schema_keys, frozenset):
+                    key_set = set(schema_keys)
+                elif isinstance(schema_keys, (set, tuple, list)):
+                    key_set = set(schema_keys)
+                else:
+                    key_set = set()
+
+                if key_name == "__required_keys__":
+                    key_set.discard("deduplicate_by_title")
+                else:
+                    key_set.add("deduplicate_by_title")
+
+                setattr(report_cls, key_name, frozenset(key_set))
+
+            report_defaults = webchanges_config.DEFAULT_CONFIG.get("report", {}).get("github_issue")
+            if isinstance(report_defaults, dict):
+                report_defaults.setdefault("deduplicate_by_title", False)
+
+            return True
+
+        if not _allow_missing_key():
+            raise RuntimeError("Cannot patch webchanges schema for report.github_issue.deduplicate_by_title")
 
         from webchanges.cli import main as webchanges_main
 

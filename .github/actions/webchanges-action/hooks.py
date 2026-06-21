@@ -29,17 +29,32 @@ def _patch_webchanges_config_schema() -> None:
         return
 
     annotations = getattr(config, "__annotations__", None)
-    if not isinstance(annotations, dict) or "deduplicate_by_title" in annotations:
+    if not isinstance(annotations, dict):
         return
 
     annotations["deduplicate_by_title"] = bool
 
     required_keys = getattr(config, "__required_keys__", frozenset())
     optional_keys = getattr(config, "__optional_keys__", frozenset())
+
     if isinstance(required_keys, frozenset):
-        config.__required_keys__ = frozenset(required_keys - {"deduplicate_by_title"})
+        required_keys = set(required_keys)
+    elif isinstance(required_keys, (set, list, tuple)):
+        required_keys = set(required_keys)
+    else:
+        required_keys = set()
+
     if isinstance(optional_keys, frozenset):
-        config.__optional_keys__ = frozenset(optional_keys | {"deduplicate_by_title"})
+        optional_keys = set(optional_keys)
+    elif isinstance(optional_keys, (set, list, tuple)):
+        optional_keys = set(optional_keys)
+    else:
+        optional_keys = set()
+
+    required_keys.discard("deduplicate_by_title")
+    optional_keys.add("deduplicate_by_title")
+    config.__required_keys__ = frozenset(required_keys)
+    config.__optional_keys__ = frozenset(optional_keys)
 
     if hasattr(storage, "_config") and isinstance(webchanges_config.DEFAULT_CONFIG, dict):
         github_issue_defaults = webchanges_config.DEFAULT_CONFIG.get("report", {}).get("github_issue")
