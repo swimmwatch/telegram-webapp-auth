@@ -1,6 +1,7 @@
 name: "Check Telegram Mini App documentation updates"
 on:
   workflow_dispatch:
+  pull_request:
   schedule:
     - cron: '0 6 * * *'
 
@@ -13,46 +14,88 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Check Telegram Mini App documentation updates
-        uses: ./.github/actions/webchanges-action
+      - name: Setup Python
+        uses: actions/setup-python@v6
         with:
-          jobs: |
-            name: Telegram Mini App documentation
-            url: https://core.telegram.org/bots/webapps
-            use_browser: false
-            ignore_timeout_errors: true
-            ignore_http_error_codes: "5xx"
-            headers:
-              User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36
-              Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-              Accept-Language: en-US,en;q=0.9
-            filters:
-              - html2text
-              - between:
-                  start: "#### __WebAppInitData"
-                  end: "#### __Events Available for Mini Apps"
-          config: |
-            display:
-              error: false
-            job_defaults:
-              all:
-                suppress_repeated_errors: true
-              url:
-                ignore_timeout_errors: true
-                ignore_http_error_codes: "5xx"
-            report:
-              tz: UTC
-              github_issue:
-                enabled: true
-                owner: "${{ github.repository_owner }}"
-                repo: "${{ github.event.repository.name }}"
-                token: "${{ secrets.GITHUB_TOKEN }}"
-                format_dt: "%Y-%m-%d"
-                title: "Telegram Mini App documentation update: {dt}"
-                deduplicate_by_title: true
-                assignees: 
-                  - "swimmwatch"
-                format_content: |
-                  ```diff
-                  {content}
-                  ```
+          python-version: "3.13"
+          cache: "pip"
+      - name: Install webchanges
+        run: |
+          python -m pip install --upgrade webchanges==3.36.1
+      - name: Create webchanges config
+        run: |
+          mkdir -p "${{ github.workspace }}/.webchanges-cache"
+
+          cat > "${{ github.workspace }}/webchanges-config.yaml" <<'CONFIG'
+          display:
+            error: false
+          job_defaults:
+            all:
+              suppress_repeated_errors: true
+            url:
+              ignore_timeout_errors: true
+              ignore_http_error_codes: "5xx"
+          report:
+            tz: UTC
+            github_issue:
+              enabled: true
+              owner: "${{ github.repository_owner }}"
+              repo: "${{ github.event.repository.name }}"
+              token: "${{ secrets.GITHUB_TOKEN }}"
+              format_dt: "%Y-%m-%d"
+              title: "Telegram Mini App documentation update: {dt}"
+              assignees:
+                - "swimmwatch"
+              format_content: |
+                ```diff
+                {content}
+                ```
+          CONFIG
+      - name: Create webchanges jobs
+        run: |
+          cat > "${{ github.workspace }}/webchanges-jobs.yaml" <<'JOBS'
+          name: Telegram Mini App documentation
+          url: https://core.telegram.org/bots/webapps
+          use_browser: false
+          ignore_timeout_errors: true
+          ignore_http_error_codes: "5xx"
+          headers:
+            User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36
+            Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+            Accept-Language: en-US,en;q=0.9
+          filters:
+            - html2text
+            - between:
+                start: "#### __WebAppInitData"
+                end: "#### __Events Available for Mini Apps"
+          JOBS
+      - name: Compute snapshot cache key
+        id: cache-keys
+        run: |
+          CONFIG_HASH=$(sha256sum "${{ github.workspace }}/webchanges-config.yaml" "${{ github.workspace }}/webchanges-jobs.yaml" | sha256sum | awk '{print $1}')
+          {
+            echo "CACHE_PREFIX=${{ runner.os }}-webchanges-${CONFIG_HASH}-"
+            echo "CACHE_KEY=${{ runner.os }}-webchanges-${CONFIG_HASH}-${{ github.run_id }}-${{ github.run_attempt }}"
+            echo "CONFIG_PATH=${{ github.workspace }}/webchanges-config.yaml"
+            echo "JOBS_PATH=${{ github.workspace }}/webchanges-jobs.yaml"
+            echo "SNAPSHOTS_PATH=${{ github.workspace }}/.webchanges-cache/snapshots.db"
+            echo "SNAPSHOTS_DIR=${{ github.workspace }}/.webchanges-cache"
+          } >> "$GITHUB_ENV"
+      - name: Restore snapshots database
+        uses: actions/cache/restore@v5
+        with:
+          path: ${{ env.SNAPSHOTS_DIR }}
+          key: ${{ env.CACHE_KEY }}
+          restore-keys: |
+            ${{ env.CACHE_PREFIX }}
+      - name: Check Telegram Mini App documentation updates
+        run: |
+          webchanges \
+            --config "${{ env.CONFIG_PATH }}" \
+            --jobs "${{ env.JOBS_PATH }}" \
+            --database "${{ env.SNAPSHOTS_PATH }}"
+      - name: Save snapshots database
+        uses: actions/cache/save@v5
+        with:
+          path: ${{ env.SNAPSHOTS_DIR }}
+          key: ${{ env.CACHE_KEY }}

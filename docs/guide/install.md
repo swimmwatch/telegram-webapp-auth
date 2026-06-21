@@ -1,8 +1,8 @@
-# Installation
+# :material-package-variant-closed: Installation
 
 `telegram-webapp-auth` supports Python 3.10 and newer. It has one runtime dependency: `cryptography`, which is used for Telegram's Ed25519 third-party validation flow.
 
-## Requirements
+## :material-list-status: Requirements
 
 - Python 3.10+
 - A Telegram bot token for the standard Mini App backend flow
@@ -12,7 +12,7 @@
 
     Never send your bot token to a browser, Mini App frontend, mobile client, log stream, or analytics tool. Use the token only on trusted backend infrastructure.
 
-## Install The Package
+## :material-package-down: Install The Package
 
 === "pip"
 
@@ -32,7 +32,7 @@
     uv add telegram-webapp-auth
     ```
 
-## Create A Clean Environment
+## :material-test-tube: Create A Clean Environment
 
 For a new project, use a virtual environment before installing dependencies:
 
@@ -49,7 +49,7 @@ On Windows PowerShell, activate the environment with:
 .venv\Scripts\Activate.ps1
 ```
 
-## Verify The Installation
+## :material-check-decagram: Verify The Installation
 
 ```python
 from telegram_webapp_auth.auth import TelegramAuthenticator
@@ -61,7 +61,7 @@ authenticator = TelegramAuthenticator(secret_key)
 
 The package is ready when this snippet imports and creates an authenticator without errors.
 
-## Next Steps
+## :material-arrow-right-thin-circle-outline: Next Steps
 
 - Continue with the [quick start](quick-start.md) for the standard bot-token flow.
 - Read [third-party validation](third-party.md) if you need Telegram public-key validation.
