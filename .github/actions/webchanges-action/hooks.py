@@ -15,60 +15,11 @@ from webchanges.reporters import MarkdownReporter
 logger = logging.getLogger(__name__)
 
 
-def _patch_webchanges_config_schema() -> None:
-    """Patch webchanges github_issue schema at runtime to accept custom dedupe option."""
-    try:
-        from webchanges import storage
-        from webchanges.storage import _config as webchanges_config
-    except Exception as exc:  # pragma: no cover - import issues should not break the action
-        logger.debug("Cannot import webchanges config schema module: %s", exc)
-        return
-
-    config = getattr(webchanges_config, "_ConfigReportGithubIssue", None)
-    if config is None:
-        return
-
-    annotations = getattr(config, "__annotations__", None)
-    if not isinstance(annotations, dict):
-        return
-
-    annotations["deduplicate_by_title"] = bool
-
-    required_keys = getattr(config, "__required_keys__", frozenset())
-    optional_keys = getattr(config, "__optional_keys__", frozenset())
-
-    if isinstance(required_keys, frozenset):
-        required_keys = set(required_keys)
-    elif isinstance(required_keys, (set, list, tuple)):
-        required_keys = set(required_keys)
-    else:
-        required_keys = set()
-
-    if isinstance(optional_keys, frozenset):
-        optional_keys = set(optional_keys)
-    elif isinstance(optional_keys, (set, list, tuple)):
-        optional_keys = set(optional_keys)
-    else:
-        optional_keys = set()
-
-    required_keys.discard("deduplicate_by_title")
-    optional_keys.add("deduplicate_by_title")
-    config.__required_keys__ = frozenset(required_keys)
-    config.__optional_keys__ = frozenset(optional_keys)
-
-    if hasattr(storage, "_config") and isinstance(webchanges_config.DEFAULT_CONFIG, dict):
-        github_issue_defaults = webchanges_config.DEFAULT_CONFIG.get("report", {}).get("github_issue")
-        if isinstance(github_issue_defaults, dict):
-            github_issue_defaults.setdefault("deduplicate_by_title", False)
-
-
-_patch_webchanges_config_schema()
-
-
-class GitHubIssueReporter(MarkdownReporter):
+class TelegramDocsGitHubIssueReporter(MarkdownReporter):
     """Reporter that submits reports as issues to a GitHub repository."""
 
     __kind__ = "github_issue"
+    _DEDUPLICATE_BY_TITLE = True
 
     config: TypedDict(
         "_ConfigReportGithubIssue",
@@ -84,7 +35,6 @@ class GitHubIssueReporter(MarkdownReporter):
             "assignees": typing.Optional[typing.Sequence[str]],
             "type": typing.Optional[str],
             "milestone": typing.Optional[str],
-            "deduplicate_by_title": typing.Optional[bool],
         },
     )
 
@@ -226,8 +176,7 @@ class GitHubIssueReporter(MarkdownReporter):
         """Create a GitHub issue or update an existing same-title issue."""
         title = self._format_title()
         content = self._format_text(content)
-
-        if self.config.get("deduplicate_by_title", False):
+        if self.config.get("deduplicate_by_title", self._DEDUPLICATE_BY_TITLE):
             issue_number = self._find_open_issue_by_title(title)
             if issue_number is not None:
                 self._update_issue(issue_number, content)

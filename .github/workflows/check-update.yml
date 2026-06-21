@@ -33,9 +33,8 @@ jobs:
                 owner: "${{ github.repository_owner }}"
                 repo: "${{ github.event.repository.name }}"
                 token: "${{ secrets.GITHUB_TOKEN }}"
-                deduplicate_by_title: true
                 format_dt: "%Y-%m-%d"
-                title: "Telegram Mini App documentation update: {dt}"
+                title: "Telegram Mini App documentation update"
                 assignees:
                   - "swimmwatch"
                 format_content: |
