@@ -63,7 +63,7 @@ pytest = "^9.0.3"
 pytest-xdist = "^3.6.1"
 freezegun = "^1.5.1"
 pytest-cov = ">=7.1.0,<8.0.0"
-pytest-benchmark = "^5.1.0"
+pytest-benchmark = "^5.3.0"
 flake8-docstrings = "^1.7.0"
 bandit = "^1.9.4"
 
